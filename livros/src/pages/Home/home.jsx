@@ -1,5 +1,9 @@
-import { ShoppingBag, User } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ShoppingBag, User, X, Trash } from "lucide-react";
 export default function Home() {
+  const [openCart, setOpenCart] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+  const totalItens = cartItems.reduce((acc, item) => acc + item.qtd, 0);
   const livros = [
     {
       id: 1,
@@ -8,7 +12,7 @@ export default function Home() {
       editora: "Todavia",
       preco: "R$ 89,90",
       imagem:
-        "https://m.media-amazon.com/images/I/61qjVYJXHnL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8051402-800-800?v=638981328522400000&width=800&height=800&aspect=true",
     },
     {
       id: 2,
@@ -17,7 +21,7 @@ export default function Home() {
       editora: "Workman Publishing",
       preco: "R$ 216,00",
       imagem:
-        "https://m.media-amazon.com/images/I/91H8d3rO0jL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8051154-300-400?v=638981302813330000&width=300&height=400&aspect=true",
     },
     {
       id: 3,
@@ -26,7 +30,7 @@ export default function Home() {
       editora: "Vergara & Riba",
       preco: "R$ 69,90",
       imagem:
-        "https://m.media-amazon.com/images/I/81FdA2KzTtL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8046548-300-400?v=638980727081170000&width=300&height=400&aspect=true",
     },
     {
       id: 4,
@@ -35,7 +39,7 @@ export default function Home() {
       editora: "Workman Publishing",
       preco: "R$ 216,00",
       imagem:
-        "https://m.media-amazon.com/images/I/91AVK2rCKmL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8043032-300-400?v=638980275563770000&width=300&height=400&aspect=true",
     },
     {
       id: 5,
@@ -44,7 +48,7 @@ export default function Home() {
       editora: "Harper Kids",
       preco: "R$ 149,90",
       imagem:
-        "https://m.media-amazon.com/images/I/81jM8YpgPOL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8045974-300-400?v=638980643688030000&width=300&height=400&aspect=true",
     },
     {
       id: 6,
@@ -53,7 +57,7 @@ export default function Home() {
       editora: "Intrínseca",
       preco: "R$ 54,90",
       imagem:
-        "https://m.media-amazon.com/images/I/81D1Wc7JcrL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8018361-300-400?v=638977128209830000&width=300&height=400&aspect=true",
     },
     {
       id: 7,
@@ -62,7 +66,7 @@ export default function Home() {
       editora: "Bertrand Brasil",
       preco: "R$ 62,00",
       imagem:
-        "https://m.media-amazon.com/images/I/81Qx9V4uR1L._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8020864-300-400?v=638977484381130000&width=300&height=400&aspect=true",
     },
     {
       id: 8,
@@ -80,7 +84,7 @@ export default function Home() {
       editora: "Record",
       preco: "R$ 69,90",
       imagem:
-        "https://m.media-amazon.com/images/I/71eWfTQmT-L._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8050681-300-400?v=638981252946170000&width=300&height=400&aspect=true",
     },
     {
       id: 10,
@@ -89,7 +93,7 @@ export default function Home() {
       editora: "Principis",
       preco: "R$ 39,90",
       imagem:
-        "https://m.media-amazon.com/images/I/81X6+HbSvbL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8007184-300-400?v=638975711541030000&width=300&height=400&aspect=true",
     },
     {
       id: 11,
@@ -98,7 +102,7 @@ export default function Home() {
       editora: "HarperCollins",
       preco: "R$ 29,90",
       imagem:
-        "https://m.media-amazon.com/images/I/81p6YpTnCwL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/7864032-300-400?v=638955963730900000&width=300&height=400&aspect=true",
     },
     {
       id: 12,
@@ -107,7 +111,7 @@ export default function Home() {
       editora: "Arqueiro",
       preco: "R$ 74,90",
       imagem:
-        "https://m.media-amazon.com/images/I/71s9Woz+FNL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8032493-800-800?v=638978960833600000&width=800&height=800&aspect=tr",
     },
     {
       id: 13,
@@ -116,7 +120,7 @@ export default function Home() {
       editora: "Paralela",
       preco: "R$ 64,90",
       imagem:
-        "https://m.media-amazon.com/images/I/81IuY-2tQxL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8051694-300-400?v=638981376436700000&width=300&height=400&aspect=true",
     },
     {
       id: 14,
@@ -125,7 +129,7 @@ export default function Home() {
       editora: "Todavia",
       preco: "R$ 84,90",
       imagem:
-        "https://m.media-amazon.com/images/I/81CwZ1l0xvL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8044837-300-400?v=638980520138430000&width=300&height=400&aspect=true",
     },
     {
       id: 15,
@@ -134,9 +138,36 @@ export default function Home() {
       editora: "Rocco",
       preco: "R$ 72,00",
       imagem:
-        "https://m.media-amazon.com/images/I/81w+9WmV5jL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8025644-300-400?v=638978083608430000&width=300&height=400&aspect=true",
     },
   ];
+
+  // impede o scroll quando o modal abre
+  useEffect(() => {
+    document.body.style.overflow = openCart ? "hidden" : "";
+  }, [openCart]);
+
+  const adicionarAoCarrinho = (livro) => {
+    setCartItems((prev) => {
+      const existente = prev.find((item) => item.id === livro.id);
+      if (existente) {
+        return prev.map((item) =>
+          item.id === livro.id ? { ...item, qtd: item.qtd + 1 } : item
+        );
+      }
+      return [...prev, { ...livro, qtd: 1 }];
+    });
+    setOpenCart(true); // abre o modal ao adicionar
+  };
+
+  const removerDoCarrinho = (id) => {
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const subtotal = cartItems.reduce(
+    (acc, item) => acc + item.preco * item.qtd,
+    0
+  );
 
   return (
     <>
@@ -157,13 +188,37 @@ export default function Home() {
               <User className="w-5 h-5 text-gray-500 cursor-pointer" />
             </div>
 
-            <button className="relative">
+            <button onClick={() => setOpenCart(true)} className="relative">
               <ShoppingBag className="w-6 h-6 text-gray-700 hover:text-blue-600 transition" />
-              <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                0
-              </span>
+              {totalItens > 0 && (
+                <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {totalItens}
+                </span>
+              )}
             </button>
           </div>
+          {/* MODAL LATERAL */}
+          {openCart && (
+            <div className="fixed inset-0 bg-black/40  z-40 flex justify-end">
+              {/* Painel lateral */}
+              <div className="w-80  bg-gray-50 h-full shadow-xl flex flex-col p-6 relative animate-slide-left">
+                {/* Fechar */}
+                <button
+                  onClick={() => setOpenCart(false)}
+                  className="absolute top-4 right-4"
+                >
+                  <X className="w-6 h-6 text-gray-800" />
+                </button>
+
+                <h2 className="text-2xl font-bold mb-6 mt-8">Carrinho</h2>
+
+                {/* Conteúdo do carrinho */}
+                <div className="flex-1 flex items-center justify-center text-gray-500">
+                  Seu carrinho está vazio.
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
@@ -200,25 +255,95 @@ export default function Home() {
                 </div>
 
                 {/* BOTÃO */}
-                <button className="bg-[#A0180E] text-white py-2 rounded-lg hover:bg-[#7e130b] transition">
+                <button
+                  onClick={() => adicionarAoCarrinho(livro)}
+                  className="bg-[#A0180E] text-white py-2 rounded-lg hover:bg-[#7e130b] transition"
+                >
                   Comprar
                 </button>
               </div>
             ))}
           </div>
         </div>
+        {/* MODAL LATERAL */}
+        {openCart && (
+          <div className="fixed inset-0 bg-black/50 z-[9999] flex justify-end">
+            <div className="w-80 sm:w-96 bg-[#FAF9F6] h-full shadow-xl flex flex-col relative p-6 animate-slide-left">
+              <button
+                onClick={() => setOpenCart(false)}
+                className="absolute top-4 right-4"
+              >
+                <X className="w-6 h-6 text-gray-800" />
+              </button>
+
+              <h2 className="text-2xl font-bold mb-6 mt-8">Carrinho</h2>
+
+              <div className="flex-1 overflow-y-auto">
+                {cartItems.length === 0 ? (
+                  <p className="text-gray-500 text-center mt-10">
+                    Seu carrinho está vazio.
+                  </p>
+                ) : (
+                  cartItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center gap-4 mb-4 border-b pb-4"
+                    >
+                      <img
+                        src={item.imagem}
+                        alt={item.titulo}
+                        className="w-16 h-20 object-contain rounded"
+                      />
+                      <div className="flex-1">
+                        <h3 className="text-sm font-semibold">{item.titulo}</h3>
+                        <p className="text-gray-600 text-xs mb-2">
+                          {item.autor}
+                        </p>
+                        <p className="text-sm font-bold">R$ {item.preco}</p>
+                      </div>
+                      <button
+                        onClick={() => removerDoCarrinho(item.id)}
+                        className="text-gray-500 hover:text-red-600"
+                      >
+                        <Trash className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {/* TOTAL */}
+              {cartItems.length > 0 && (
+                <div className="border-t pt-4">
+                  <div className="flex justify-between text-sm mb-1">
+                    <span>Subtotal</span>
+                    <span>R$ {livros.preco}</span>
+                  </div>
+                  <div className="flex justify-between font-bold text-lg mb-4">
+                    <span>Total</span>
+                    <span>R$ {livros.preco}</span>
+                  </div>
+                  <button className="w-full bg-[#A0180E] text-white py-3 rounded-lg font-semibold hover:bg-[#7e130b] transition">
+                    Finalizar Compra
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       <footer className="bg-gray-900 text-gray-300 px-8 py-4 ">
-      <div className="container mx-auto px-4 text-center">
-        <p className="text-sm">
-          &copy; {new Date().getFullYear()} Livraria. Todos os direitos reservados.
-        </p>
-        <p className="text-xs mt-2 text-gray-500">
-          Desenvolvido por Kauan Batista / Pedro / Felipe
-        </p>
-      </div>
-    </footer>
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-sm">
+            &copy; {new Date().getFullYear()} Livraria. Todos os direitos
+            reservados.
+          </p>
+          <p className="text-xs mt-2 text-gray-500">
+            Desenvolvido por Kauan Batista / Pedro / Felipe
+          </p>
+        </div>
+      </footer>
     </>
   );
 }
