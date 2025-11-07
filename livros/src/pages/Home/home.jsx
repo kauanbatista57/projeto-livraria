@@ -1,5 +1,7 @@
-import { ShoppingBag, User } from "lucide-react";
+import { useState } from "react";
+import { ShoppingBag, User, X } from "lucide-react";
 export default function Home() {
+  const [openCart, setOpenCart] = useState(false);
   const livros = [
     {
       id: 1,
@@ -157,13 +159,35 @@ export default function Home() {
               <User className="w-5 h-5 text-gray-500 cursor-pointer" />
             </div>
 
-            <button className="relative">
+            <button onClick={() => setOpenCart(true)} className="relative">
               <ShoppingBag className="w-6 h-6 text-gray-700 hover:text-blue-600 transition" />
               <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                 0
               </span>
             </button>
           </div>
+          {/* MODAL LATERAL */}
+          {openCart && (
+            <div className="fixed inset-0 bg-black/40  z-40 flex justify-end">
+              {/* Painel lateral */}
+              <div className="w-80  bg-gray-50 h-full shadow-xl flex flex-col p-6 relative animate-slide-left">
+                {/* Fechar */}
+                <button
+                  onClick={() => setOpenCart(false)}
+                  className="absolute top-4 right-4"
+                >
+                  <X className="w-6 h-6 text-gray-800" />
+                </button>
+
+                <h2 className="text-2xl font-bold mb-6 mt-8">Carrinho</h2>
+
+                {/* Conteúdo do carrinho */}
+                <div className="flex-1 flex items-center justify-center text-gray-500">
+                  Seu carrinho está vazio.
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
@@ -210,15 +234,16 @@ export default function Home() {
       </div>
 
       <footer className="bg-gray-900 text-gray-300 px-8 py-4 ">
-      <div className="container mx-auto px-4 text-center">
-        <p className="text-sm">
-          &copy; {new Date().getFullYear()} Livraria. Todos os direitos reservados.
-        </p>
-        <p className="text-xs mt-2 text-gray-500">
-          Desenvolvido por Kauan Batista / Pedro / Felipe
-        </p>
-      </div>
-    </footer>
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-sm">
+            &copy; {new Date().getFullYear()} Livraria. Todos os direitos
+            reservados.
+          </p>
+          <p className="text-xs mt-2 text-gray-500">
+            Desenvolvido por Kauan Batista / Pedro / Felipe
+          </p>
+        </div>
+      </footer>
     </>
   );
 }
