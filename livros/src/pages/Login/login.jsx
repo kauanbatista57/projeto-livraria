@@ -1,4 +1,4 @@
-export default function Logout() {
+export default function Login() {
   return (
       <div className="grid grid-cols-12 min-h-screen">
       {/* LADO ESQUERDO */}
