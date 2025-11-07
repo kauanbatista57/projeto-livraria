@@ -209,7 +209,7 @@ export default function Home() {
         </div>
       </div>
 
-      <footer className="bg-gray-900 text-gray-300 px-8 py-4 mt-10">
+      <footer className="bg-gray-900 text-gray-300 px-8 py-4 ">
       <div className="container mx-auto px-4 text-center">
         <p className="text-sm">
           &copy; {new Date().getFullYear()} Livraria. Todos os direitos reservados.
