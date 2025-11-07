@@ -12,7 +12,7 @@ export default function Home() {
       editora: "Todavia",
       preco: "R$ 89,90",
       imagem:
-        "https://m.media-amazon.com/images/I/61qjVYJXHnL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8051402-800-800?v=638981328522400000&width=800&height=800&aspect=true",
     },
     {
       id: 2,
@@ -21,7 +21,7 @@ export default function Home() {
       editora: "Workman Publishing",
       preco: "R$ 216,00",
       imagem:
-        "https://m.media-amazon.com/images/I/91H8d3rO0jL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8051154-300-400?v=638981302813330000&width=300&height=400&aspect=true",
     },
     {
       id: 3,
@@ -30,7 +30,7 @@ export default function Home() {
       editora: "Vergara & Riba",
       preco: "R$ 69,90",
       imagem:
-        "https://m.media-amazon.com/images/I/81FdA2KzTtL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8046548-300-400?v=638980727081170000&width=300&height=400&aspect=true",
     },
     {
       id: 4,
@@ -39,7 +39,7 @@ export default function Home() {
       editora: "Workman Publishing",
       preco: "R$ 216,00",
       imagem:
-        "https://m.media-amazon.com/images/I/91AVK2rCKmL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8043032-300-400?v=638980275563770000&width=300&height=400&aspect=true",
     },
     {
       id: 5,
@@ -48,7 +48,7 @@ export default function Home() {
       editora: "Harper Kids",
       preco: "R$ 149,90",
       imagem:
-        "https://m.media-amazon.com/images/I/81jM8YpgPOL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8045974-300-400?v=638980643688030000&width=300&height=400&aspect=true",
     },
     {
       id: 6,
@@ -57,7 +57,7 @@ export default function Home() {
       editora: "Intrínseca",
       preco: "R$ 54,90",
       imagem:
-        "https://m.media-amazon.com/images/I/81D1Wc7JcrL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8018361-300-400?v=638977128209830000&width=300&height=400&aspect=true",
     },
     {
       id: 7,
@@ -66,7 +66,7 @@ export default function Home() {
       editora: "Bertrand Brasil",
       preco: "R$ 62,00",
       imagem:
-        "https://m.media-amazon.com/images/I/81Qx9V4uR1L._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8020864-300-400?v=638977484381130000&width=300&height=400&aspect=true",
     },
     {
       id: 8,
@@ -84,7 +84,7 @@ export default function Home() {
       editora: "Record",
       preco: "R$ 69,90",
       imagem:
-        "https://m.media-amazon.com/images/I/71eWfTQmT-L._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8050681-300-400?v=638981252946170000&width=300&height=400&aspect=true",
     },
     {
       id: 10,
@@ -93,7 +93,7 @@ export default function Home() {
       editora: "Principis",
       preco: "R$ 39,90",
       imagem:
-        "https://m.media-amazon.com/images/I/81X6+HbSvbL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8007184-300-400?v=638975711541030000&width=300&height=400&aspect=true",
     },
     {
       id: 11,
@@ -102,7 +102,7 @@ export default function Home() {
       editora: "HarperCollins",
       preco: "R$ 29,90",
       imagem:
-        "https://m.media-amazon.com/images/I/81p6YpTnCwL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/7864032-300-400?v=638955963730900000&width=300&height=400&aspect=true",
     },
     {
       id: 12,
@@ -111,7 +111,7 @@ export default function Home() {
       editora: "Arqueiro",
       preco: "R$ 74,90",
       imagem:
-        "https://m.media-amazon.com/images/I/71s9Woz+FNL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8032493-800-800?v=638978960833600000&width=800&height=800&aspect=tr",
     },
     {
       id: 13,
@@ -120,7 +120,7 @@ export default function Home() {
       editora: "Paralela",
       preco: "R$ 64,90",
       imagem:
-        "https://m.media-amazon.com/images/I/81IuY-2tQxL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8051694-300-400?v=638981376436700000&width=300&height=400&aspect=true",
     },
     {
       id: 14,
@@ -129,7 +129,7 @@ export default function Home() {
       editora: "Todavia",
       preco: "R$ 84,90",
       imagem:
-        "https://m.media-amazon.com/images/I/81CwZ1l0xvL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8044837-300-400?v=638980520138430000&width=300&height=400&aspect=true",
     },
     {
       id: 15,
@@ -138,7 +138,7 @@ export default function Home() {
       editora: "Rocco",
       preco: "R$ 72,00",
       imagem:
-        "https://m.media-amazon.com/images/I/81w+9WmV5jL._AC_UF1000,1000_QL80_.jpg",
+        "https://livrariadavila.vtexassets.com/arquivos/ids/8025644-300-400?v=638978083608430000&width=300&height=400&aspect=true",
     },
   ];
 
