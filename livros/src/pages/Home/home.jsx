@@ -10,7 +10,7 @@ export default function Home() {
       titulo: "Coração sem Medo",
       autor: "Itamar Vieira Junior",
       editora: "Todavia",
-      preco: "R$ 89,900",
+      preco: "R$ 89,90",
       imagem:
         "https://livrariadavila.vtexassets.com/arquivos/ids/8051402-800-800?v=638981328522400000&width=800&height=800&aspect=true",
     },
