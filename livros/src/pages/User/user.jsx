@@ -71,7 +71,7 @@ export default function User() {
               {/* Nome completo */}
               <div className="col-span-2">
                 <label className="block text-gray-600 text-sm mb-1">
-                  Nome completo<span className="text-red-500">*</span>
+                  Nome completo<span className="text-[#A0180E]">*</span>
                 </label>
                 <input
                   type="text"
@@ -84,7 +84,7 @@ export default function User() {
 
             {/* Botões */}
             <div className="flex flex-col items-center justify-between mt-8 gap-4">
-              <button className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-md">
+              <button className="bg-[#A0180E] hover:bg-[#A0180E] text-white font-semibold py-3 px-6 rounded-md">
                 SALVAR ALTERAÇÕES
               </button>
             </div>
