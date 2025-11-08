@@ -5,8 +5,8 @@ export default function SidebarMenu() {
   const [active, setActive] = useState("Início");
 
   const menuItems = [
-    { name: "Início", icon: <Home size={20} /> },
     { name: "Meus dados", icon: <User size={20} /> },
+    { name: "Início", icon: <Home size={20} /> },
     { name: "Meus pedidos", icon: <ShoppingBag size={20} /> },
   ];
 
