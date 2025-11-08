@@ -2,14 +2,13 @@
 class Database {
   private $host = "localhost";
   private $db_name = "livraria";
-  private $username = "postgres";
-  private $password = "123456"; 
+  private $username = "user_livraria";
+  private $password = "123456";
   public $conn;
 
   public function getConnection() {
     $this->conn = null;
     try {
-      // Driver pgsq
       $this->conn = new PDO(
         "pgsql:host={$this->host};dbname={$this->db_name}",
         $this->username,

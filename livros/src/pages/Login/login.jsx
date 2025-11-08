@@ -22,7 +22,7 @@ export default function Login() {
             Vamos começar?
           </h2>
           <p className="text-gray-700 mb-8">
-            Entre com sua conta em nosso site de livros!
+            Entre com sua conta em nosso site de livros
           </p>
 
           {/* FORMULÁRIO */}
