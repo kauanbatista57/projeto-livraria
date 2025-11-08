@@ -2,7 +2,7 @@
 class Database {
   private $host = "localhost";
   private $db_name = "livraria";
-  private $username = "postgres";
+  private $username = "user_livraria";
   private $password = "123456"; 
   public $conn;
 
