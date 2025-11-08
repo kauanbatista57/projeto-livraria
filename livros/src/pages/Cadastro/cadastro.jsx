@@ -64,7 +64,7 @@ export default function Cadastro() {
               type="submit"
               className="w-full py-3 bg-[#A0180E] text-white font-semibold rounded-full hover:bg-[#7e130b] transition"
             >
-              Entrar
+              Cadastrar
             </button>
           </form>
         </div>
