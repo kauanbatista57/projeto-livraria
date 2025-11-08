@@ -1,6 +1,9 @@
 export default function Login() {
   return (
+    <>
       <div className="grid grid-cols-12 min-h-screen">
+        
+        
       {/* LADO ESQUERDO */}
       <div className="col-span-12 md:col-span-6 bg-slate-500 flex flex-col justify-center items-center text-white px-8 py-10">
         <img
@@ -56,5 +59,6 @@ export default function Login() {
         </div>
       </div>
     </div>
+    </>
   );
 }
