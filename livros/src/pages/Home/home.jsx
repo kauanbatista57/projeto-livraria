@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ShoppingBag, User, X, Trash } from "lucide-react";
+import { Link } from "react-router-dom";
 export default function Home() {
   const [openCart, setOpenCart] = useState(false);
   const [cartItems, setCartItems] = useState([]);
@@ -185,7 +186,9 @@ export default function Home() {
           {/* Lado direito: login + sacola */}
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2 border border-gray-300 rounded-lg px-3 py-2 hover:border-blue-500 transition">
+               <Link  to="/usuario">
               <User className="w-5 h-5 text-gray-500 cursor-pointer" />
+               </ Link>
             </div>
 
             <button onClick={() => setOpenCart(true)} className="relative">
