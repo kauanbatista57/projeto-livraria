@@ -1,0 +1,21 @@
+{
+  "name": "projeto-de-apresenta-o",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kauanbatista57/projeto-de-apresenta-o.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kauanbatista57/projeto-de-apresenta-o/issues"
+  },
+  "homepage": "https://github.com/kauanbatista57/projeto-de-apresenta-o#readme"
+}
