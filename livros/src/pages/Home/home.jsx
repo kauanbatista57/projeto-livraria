@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { ShoppingBag, User, X, Trash } from "lucide-react";
+import { Link } from "react-router-dom";
 
 // Helper to parse price string to a number (R$ 89,90 -> 89.90)
 const parsePreco = (preco) =>
@@ -256,7 +257,11 @@ export default function Home() {
             <div className="flex items-center space-x-2 border border-gray-300 rounded-lg px-3 py-2 hover:border-[#A0180E] transition">
                 {/* Removed Link import, using div/a tag */}
                 <div className="cursor-pointer">
-                    <User className="w-5 h-5 text-gray-500 hover:text-[#A0180E]" />
+                   <Link
+                to="/usuario"
+                className="text-white underline hover:text-gray-300 transition"
+              >  <User className="w-5 h-5 text-gray-500 hover:text-[#A0180E]" /></Link>
+                  
                 </div>
             </div>
 
