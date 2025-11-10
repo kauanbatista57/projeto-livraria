@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 export default function Login() {
   return (
     <>
@@ -47,6 +48,15 @@ export default function Login() {
                 placeholder="Informe sua senha"
                 className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none"
               />
+
+                <div className="text-right mt-2">
+                  <Link
+                    to="/cadastro"
+                    className="text-[#A0180E] hover:underline text-sm font-medium"
+                  >
+                    Cadastrar conta
+                  </Link>
+                </div>
             </div>
 
             <button
