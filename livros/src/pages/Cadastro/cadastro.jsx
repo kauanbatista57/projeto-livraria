@@ -5,41 +5,54 @@ export default function Cadastro() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
+  const [loading, setLoading] = useState(false);
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await fetch("http://localhost/livros/api/index.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        nome_completo: nome,
-        email,
-        senha,
-        data_nascimento: dataNascimento,
-      }),
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const text = await response.text(); 
-    let data;
+    if (!nome || !email || !senha || !dataNascimento) {
+      alert("⚠️ Preencha todos os campos!");
+      return;
+    }
+
+    setLoading(true);
 
     try {
-      data = JSON.parse(text); 
-    } catch {
-      throw new Error("Retorno inválido do servidor: " + text);
-    }
+      const response = await fetch("http://localhost/projeto-de-apresenta-o/livros/api/index.php?action=create",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            nome_completo: nome,
+            email,
+            senha,
+            data_nascimento: dataNascimento,
+          }),
+        }
+      );
 
-    if (data.success) {
-      alert("✅ Conta criada com sucesso!");
-      setTimeout(() => (window.location.href = "/login"), 1000);
-    } else {
-      alert("❌ " + data.message);
-    }
-  } catch (error) {
-    alert("❌ Erro: " + error.message);
-  }
-};
+      const text = await response.text();
+      let data;
 
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error("Retorno inválido do servidor: " + text);
+      }
+
+      if (data.success) {
+        alert("✅ Cadastro realizado com sucesso!");
+        setTimeout(() => (window.location.href = "/login"), 800);
+      } else {
+        alert("❌ Erro: " + (data.message || "Não foi possível cadastrar."));
+      }
+    } catch (error) {
+      alert("❌ Erro: " + error.message);
+      console.error("Erro no cadastro:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="grid grid-cols-12 min-h-screen">
@@ -53,12 +66,18 @@ const handleSubmit = async (e) => {
       {/* LADO DIREITO */}
       <div className="col-span-12 md:col-span-6 bg-gray-50 flex flex-col justify-center px-10 md:px-20">
         <div className="max-w-md mx-auto w-full">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">Vamos começar?</h2>
-          <p className="text-gray-700 mb-8">Crie sua conta na nossa livraria agora!</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+            Vamos começar?
+          </h2>
+          <p className="text-gray-700 mb-8">
+            Crie sua conta na nossa livraria agora!
+          </p>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label className="block font-semibold text-gray-700 mb-1">Nome completo</label>
+              <label className="block font-semibold text-gray-700 mb-1">
+                Nome completo
+              </label>
               <input
                 type="text"
                 placeholder="Informe seu nome completo"
@@ -69,7 +88,9 @@ const handleSubmit = async (e) => {
             </div>
 
             <div>
-              <label className="block font-semibold text-gray-700 mb-1">E-mail</label>
+              <label className="block font-semibold text-gray-700 mb-1">
+                E-mail
+              </label>
               <input
                 type="email"
                 placeholder="Informe seu e-mail"
@@ -80,7 +101,9 @@ const handleSubmit = async (e) => {
             </div>
 
             <div>
-              <label className="block font-semibold text-gray-700 mb-1">Senha</label>
+              <label className="block font-semibold text-gray-700 mb-1">
+                Senha
+              </label>
               <input
                 type="password"
                 placeholder="Informe sua senha"
@@ -91,7 +114,9 @@ const handleSubmit = async (e) => {
             </div>
 
             <div>
-              <label className="block font-semibold text-gray-700 mb-1">Data de nascimento</label>
+              <label className="block font-semibold text-gray-700 mb-1">
+                Data de nascimento
+              </label>
               <input
                 type="date"
                 className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none"
@@ -102,9 +127,14 @@ const handleSubmit = async (e) => {
 
             <button
               type="submit"
-              className="w-full py-3 bg-[#A0180E] text-white font-semibold rounded-full hover:bg-[#7e130b] transition"
+              disabled={loading}
+              className={`w-full py-3 font-semibold rounded-full transition ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#A0180E] hover:bg-[#7e130b] text-white"
+              }`}
             >
-              Cadastrar
+              {loading ? "Cadastrando..." : "Cadastrar"}
             </button>
           </form>
         </div>

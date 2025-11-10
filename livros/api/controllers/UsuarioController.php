@@ -13,8 +13,8 @@ class UsuarioController {
   }
 
   public function create($data) {
-    if (!isset($data->nome_completo, $data->email, $data->senha, $data->data_nascimento)) {
-      echo json_encode(["success" => false, "message" => "Dados incompletos."]);
+    if (empty($data->nome_completo) || empty($data->email) || empty($data->senha) || empty($data->data_nascimento)) {
+      echo json_encode(["success" => false, "message" => "Preencha todos os campos."]);
       return;
     }
 
@@ -31,21 +31,16 @@ class UsuarioController {
   }
 
   public function login($data) {
-    if (!isset($data->email, $data->senha)) {
-      echo json_encode(["success" => false, "message" => "E-mail e senha são obrigatórios."]);
+    if (empty($data->email) || empty($data->senha)) {
+      echo json_encode(["success" => false, "message" => "Preencha todos os campos."]);
       return;
     }
 
     $this->usuario->email = $data->email;
     $this->usuario->senha = $data->senha;
 
-    $result = $this->usuario->login();
-
-    if ($result) {
-      echo json_encode(["success" => true, "usuario" => $result]);
-    } else {
-      echo json_encode(["success" => false, "message" => "E-mail ou senha incorretos."]);
-    }
+    $resultado = $this->usuario->login();
+    echo json_encode($resultado);
   }
 
   public function readAll() {

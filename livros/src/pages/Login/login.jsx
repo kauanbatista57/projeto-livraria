@@ -7,7 +7,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost/livros/api/index.php?action=login", {
+    const response = await fetch("http://localhost/projeto-de-apresenta-o/livros/api/index.php?action=login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
