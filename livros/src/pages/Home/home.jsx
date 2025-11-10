@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { ShoppingBag, User, X, Trash } from "lucide-react";
-import { Link } from "react-router-dom";
+
 export default function Home() {
   const [openCart, setOpenCart] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const totalItens = cartItems.reduce((acc, item) => acc + item.qtd, 0);
+
   const livros = [
     {
       id: 1,
@@ -78,72 +79,8 @@ export default function Home() {
       imagem:
         "https://m.media-amazon.com/images/I/81s0B6NYXML._AC_UF1000,1000_QL80_.jpg",
     },
-    {
-      id: 9,
-      titulo: "A Paciente Silenciosa",
-      autor: "Alex Michaelides",
-      editora: "Record",
-      preco: "R$ 69,90",
-      imagem:
-        "https://livrariadavila.vtexassets.com/arquivos/ids/8050681-300-400?v=638981252946170000&width=300&height=400&aspect=true",
-    },
-    {
-      id: 10,
-      titulo: "As Aventuras de Sherlock Holmes",
-      autor: "Arthur Conan Doyle",
-      editora: "Principis",
-      preco: "R$ 39,90",
-      imagem:
-        "https://livrariadavila.vtexassets.com/arquivos/ids/8007184-300-400?v=638975711541030000&width=300&height=400&aspect=true",
-    },
-    {
-      id: 11,
-      titulo: "O Pequeno Príncipe",
-      autor: "Antoine de Saint-Exupéry",
-      editora: "HarperCollins",
-      preco: "R$ 29,90",
-      imagem:
-        "https://livrariadavila.vtexassets.com/arquivos/ids/7864032-300-400?v=638955963730900000&width=300&height=400&aspect=true",
-    },
-    {
-      id: 12,
-      titulo: "O Código Da Vinci",
-      autor: "Dan Brown",
-      editora: "Arqueiro",
-      preco: "R$ 74,90",
-      imagem:
-        "https://livrariadavila.vtexassets.com/arquivos/ids/8032493-800-800?v=638978960833600000&width=800&height=800&aspect=tr",
-    },
-    {
-      id: 13,
-      titulo: "Os Sete Maridos de Evelyn Hugo",
-      autor: "Taylor Jenkins Reid",
-      editora: "Paralela",
-      preco: "R$ 64,90",
-      imagem:
-        "https://livrariadavila.vtexassets.com/arquivos/ids/8051694-300-400?v=638981376436700000&width=300&height=400&aspect=true",
-    },
-    {
-      id: 14,
-      titulo: "Torto Arado",
-      autor: "Itamar Vieira Junior",
-      editora: "Todavia",
-      preco: "R$ 84,90",
-      imagem:
-        "https://livrariadavila.vtexassets.com/arquivos/ids/8044837-300-400?v=638980520138430000&width=300&height=400&aspect=true",
-    },
-    {
-      id: 15,
-      titulo: "O Conto da Aia",
-      autor: "Margaret Atwood",
-      editora: "Rocco",
-      preco: "R$ 72,00",
-      imagem:
-        "https://livrariadavila.vtexassets.com/arquivos/ids/8025644-300-400?v=638978083608430000&width=300&height=400&aspect=true",
-    },
   ];
 
-  // impede o scroll quando o modal abre
   useEffect(() => {
     document.body.style.overflow = openCart ? "hidden" : "";
   }, [openCart]);
@@ -158,23 +95,33 @@ export default function Home() {
       }
       return [...prev, { ...livro, qtd: 1 }];
     });
-    setOpenCart(true); // abre o modal ao adicionar
+    setOpenCart(true);
   };
 
   const removerDoCarrinho = (id) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
+  // Converte o preço de string ("R$ 89,90") para número
+  const parsePreco = (preco) =>
+    parseFloat(preco.replace("R$", "").replace(".", "").replace(",", "."));
+
+  // Calcula subtotal
   const subtotal = cartItems.reduce(
-    (acc, item) => acc + item.preco * item.qtd,
+    (acc, item) => acc + parsePreco(item.preco) * item.qtd,
     0
   );
+
+  const formatarPreco = (valor) =>
+    valor.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
 
   return (
     <>
       <header className="bg-white shadow-md ">
-        <div className="container mx-auto px-8 py-4 flex items-center justify-between">
-          {/* Lado esquerdo: logo */}
+       <div className="container mx-auto px-8 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <img
               src="/assets/icon.png"
@@ -183,13 +130,10 @@ export default function Home() {
             />
           </div>
 
-          {/* Lado direito: login + sacola */}
-          <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2 border border-gray-300 rounded-lg px-3 py-2 hover:border-blue-500 transition">
-               <Link  to="/usuario">
-              <User className="w-5 h-5 text-gray-500 cursor-pointer" />
-               </ Link>
-            </div>
+            <User className="w-5 h-5 text-gray-500 cursor-pointer" />
+          </div>
 
             <button onClick={() => setOpenCart(true)} className="relative">
               <ShoppingBag className="w-6 h-6 text-gray-700 hover:text-blue-600 transition" />
@@ -200,29 +144,7 @@ export default function Home() {
               )}
             </button>
           </div>
-          {/* MODAL LATERAL */}
-          {openCart && (
-            <div className="fixed inset-0 bg-black/40  z-40 flex justify-end">
-              {/* Painel lateral */}
-              <div className="w-80  bg-gray-50 h-full shadow-xl flex flex-col p-6 relative animate-slide-left">
-                {/* Fechar */}
-                <button
-                  onClick={() => setOpenCart(false)}
-                  className="absolute top-4 right-4"
-                >
-                  <X className="w-6 h-6 text-gray-800" />
-                </button>
-
-                <h2 className="text-2xl font-bold mb-6 mt-8">Carrinho</h2>
-
-                {/* Conteúdo do carrinho */}
-                <div className="flex-1 flex items-center justify-center text-gray-500">
-                  Seu carrinho está vazio.
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+      </div>
       </header>
 
       <div className="bg-[#FAF9F6] min-h-screen py-10">
@@ -231,15 +153,13 @@ export default function Home() {
             Livros em Destaque
           </h1>
 
-          {/* GRID DE 12 COLUNAS */}
-          <div className="grid grid-cols-12 p-2 gap-6 justify-center">
+        <div className="grid grid-cols-12 p-2 gap-6 justify-center">
             {livros.map((livro) => (
               <div
                 key={livro.id}
                 className="col-span-12 lg:col-span-3 bg-white rounded-xl shadow-md p-4 flex flex-col justify-between hover:shadow-lg transition"
               >
-                {/* IMAGEM */}
-                <div className="flex justify-center mb-4">
+              <div className="flex justify-center mb-4">
                   <img
                     src={livro.imagem}
                     alt={livro.titulo}
@@ -247,8 +167,7 @@ export default function Home() {
                   />
                 </div>
 
-                {/* INFORMAÇÕES */}
-                <div>
+              <div>
                   <h2 className="text-base font-semibold mb-1">
                     {livro.titulo}
                   </h2>
@@ -257,8 +176,7 @@ export default function Home() {
                   <p className="text-lg font-bold mb-3">{livro.preco}</p>
                 </div>
 
-                {/* BOTÃO */}
-                <button
+              <button
                   onClick={() => adicionarAoCarrinho(livro)}
                   className="bg-[#A0180E] text-white py-2 rounded-lg hover:bg-[#7e130b] transition"
                 >
@@ -268,7 +186,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-        {/* MODAL LATERAL */}
+
         {openCart && (
           <div className="fixed inset-0 bg-black/50 z-[9999] flex justify-end">
             <div className="w-80 sm:w-96 bg-[#FAF9F6] h-full shadow-xl flex flex-col relative p-6 animate-slide-left">
@@ -302,7 +220,7 @@ export default function Home() {
                         <p className="text-gray-600 text-xs mb-2">
                           {item.autor}
                         </p>
-                        <p className="text-sm font-bold">R$ {item.preco}</p>
+                        <p className="text-sm font-bold">{item.preco}</p>
                       </div>
                       <button
                         onClick={() => removerDoCarrinho(item.id)}
@@ -315,16 +233,15 @@ export default function Home() {
                 )}
               </div>
 
-              {/* TOTAL */}
-              {cartItems.length > 0 && (
+            {cartItems.length > 0 && (
                 <div className="border-t pt-4">
                   <div className="flex justify-between text-sm mb-1">
                     <span>Subtotal</span>
-                    <span>R$ {livros.preco}</span>
+                    <span>{formatarPreco(subtotal)}</span>
                   </div>
                   <div className="flex justify-between font-bold text-lg mb-4">
                     <span>Total</span>
-                    <span>R$ {livros.preco}</span>
+                    <span>{formatarPreco(subtotal)}</span>
                   </div>
                   <button className="w-full bg-[#A0180E] text-white py-3 rounded-lg font-semibold hover:bg-[#7e130b] transition">
                     Finalizar Compra
