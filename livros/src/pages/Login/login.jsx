@@ -56,11 +56,11 @@ export default function Login() {
           <form className="space-y-6">
             <div>
               <label className="block font-semibold text-gray-700 mb-1">
-                Usuário
+                Email
               </label>
               <input
                 type="text"
-                placeholder="Informe seu usuário"
+                placeholder="Informe seu Email"
                 className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none"
               />
             </div>
