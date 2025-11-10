@@ -170,6 +170,24 @@ export default function Home() {
     0
   );
 
+
+  const banners = [
+    "https://livrariadavila.vtexassets.com/assets/vtex.file-manager-graphql/images/e96c8031-a005-4eae-96d0-7f40eacc92c1___edebef67d5ff063517ef313210fc43d9.jpg",
+    "https://livrariadavila.vtexassets.com/assets/vtex.file-manager-graphql/images/ec91cd9f-5242-4159-84ab-1868b43b9e0d___2b90637e45400acf8a236fad11f2fd01.png",
+    "https://livrariadavila.vtexassets.com/assets/vtex.file-manager-graphql/images/e892b456-e9e1-4eea-976e-910d4a31940a___faad66c6dbfeb323062f0fab64dab6de.png",
+    "https://livrariadavila.vtexassets.com/assets/vtex.file-manager-graphql/images/a8970fb6-a809-45f5-94f5-ea8fcd80dc89___a4a15dd4461bd36572fe7b83f7b8cf6a.jpg",
+  ];
+
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % banners.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [banners.length]);
+
+
   return (
     <>
       <header className="bg-white shadow-md ">
@@ -224,6 +242,35 @@ export default function Home() {
           )}
         </div>
       </header>
+
+
+            <div className="relative w-full h-[250px] overflow-hidden lg:mt-10">
+      {banners.map((img, index) => (
+        <img
+          key={index}
+          src={img}
+          alt="banner"
+          className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-700 ${
+            index === current ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      ))}
+
+      {/* Bolinhas */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+        {banners.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrent(index)}
+            className={`w-3 h-3 rounded-full ${
+              current === index ? "bg-white" : "bg-gray-400"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+
+
 
       <div className="bg-gray-100 min-h-screen py-10">
         <div className="container mx-auto">
