@@ -1,16 +1,51 @@
+import React, { useState } from "react";
+
 export default function Cadastro() {
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [dataNascimento, setDataNascimento] = useState("");
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await fetch("http://localhost/livros/api/index.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nome_completo: nome,
+        email,
+        senha,
+        data_nascimento: dataNascimento,
+      }),
+    });
+
+    const text = await response.text(); 
+    let data;
+
+    try {
+      data = JSON.parse(text); 
+    } catch {
+      throw new Error("Retorno inválido do servidor: " + text);
+    }
+
+    if (data.success) {
+      alert("✅ Conta criada com sucesso!");
+      setTimeout(() => (window.location.href = "/login"), 1000);
+    } else {
+      alert("❌ " + data.message);
+    }
+  } catch (error) {
+    alert("❌ Erro: " + error.message);
+  }
+};
+
+
   return (
-    <>
-      <div className="grid grid-cols-12 min-h-screen">
-        
-        
+    <div className="grid grid-cols-12 min-h-screen">
       {/* LADO ESQUERDO */}
       <div className="col-span-12 md:col-span-6 bg-slate-500 flex flex-col justify-center items-center text-white px-8 py-10">
-        <img
-          src="/assets/icon.png"
-          alt="Logo"
-          className="w-40 mb-10"
-        />
+        <img src="/assets/icon.png" alt="Logo" className="w-40 mb-10" />
         <h1 className="text-5xl font-light mb-2">Editora de</h1>
         <h1 className="text-6xl font-bold">Livros</h1>
       </div>
@@ -18,45 +53,50 @@ export default function Cadastro() {
       {/* LADO DIREITO */}
       <div className="col-span-12 md:col-span-6 bg-gray-50 flex flex-col justify-center px-10 md:px-20">
         <div className="max-w-md mx-auto w-full">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-            Vamos começar?
-          </h2>
-          <p className="text-gray-700 mb-8">
-           Crie sua conta na nossa livraria agora!
-          </p>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">Vamos começar?</h2>
+          <p className="text-gray-700 mb-8">Crie sua conta na nossa livraria agora!</p>
 
-          {/* FORMULÁRIO */}
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label className="block font-semibold text-gray-700 mb-1">
-                Nome
-              </label>
+              <label className="block font-semibold text-gray-700 mb-1">Nome completo</label>
               <input
                 type="text"
-                placeholder="Informe seu usuário"
+                placeholder="Informe seu nome completo"
                 className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
               />
             </div>
 
             <div>
-              <label className="block font-semibold text-gray-700 mb-1">
-                E-mail
-              </label>
+              <label className="block font-semibold text-gray-700 mb-1">E-mail</label>
               <input
-                type="text"
-                placeholder="Informe seu E-mail"
+                type="email"
+                placeholder="Informe seu e-mail"
                 className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
             <div>
-              <label className="block font-semibold text-gray-700 mb-1">
-                Senha
-              </label>
+              <label className="block font-semibold text-gray-700 mb-1">Senha</label>
               <input
                 type="password"
                 placeholder="Informe sua senha"
                 className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label className="block font-semibold text-gray-700 mb-1">Data de nascimento</label>
+              <input
+                type="date"
+                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none"
+                value={dataNascimento}
+                onChange={(e) => setDataNascimento(e.target.value)}
               />
             </div>
 
@@ -70,6 +110,5 @@ export default function Cadastro() {
         </div>
       </div>
     </div>
-    </>
   );
 }

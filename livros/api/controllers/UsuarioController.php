@@ -1,74 +1,58 @@
 <?php
-include_once "./config/Database.php";
-include_once "./models/Usuario.php";
+require_once(__DIR__ . '/../config/database.php');
+require_once(__DIR__ . '/../models/Usuario.php');
 
 class UsuarioController {
-  private $db;
+  private $conn;
   private $usuario;
 
   public function __construct() {
     $database = new Database();
-    $this->db = $database->getConnection();
-    $this->usuario = new Usuario($this->db);
+    $this->conn = $database->getConnection();
+    $this->usuario = new Usuario($this->conn);
   }
 
- 
   public function create($data) {
-    if (!isset($data->nome) || !isset($data->usuario) || !isset($data->senha) || !isset($data->perfil)) {
-      echo json_encode(["error" => "Campos obrigatórios não informados."]);
+    if (!isset($data->nome_completo, $data->email, $data->senha, $data->data_nascimento)) {
+      echo json_encode(["success" => false, "message" => "Dados incompletos."]);
       return;
     }
 
-    $this->usuario->nome = $data->nome;
-    $this->usuario->usuario = $data->usuario;
+    $this->usuario->nome_completo = $data->nome_completo;
+    $this->usuario->email = $data->email;
     $this->usuario->senha = $data->senha;
-    $this->usuario->perfil = $data->perfil;
+    $this->usuario->data_nascimento = $data->data_nascimento;
 
-    if ($this->usuario->create()) {
-      echo json_encode(["message" => "Usuário criado com sucesso!"]);
+    if ($this->usuario->cadastrar()) {
+      echo json_encode(["success" => true, "message" => "Usuário cadastrado com sucesso."]);
     } else {
-      echo json_encode(["error" => "Erro ao criar usuário."]);
+      echo json_encode(["success" => false, "message" => "Erro ao cadastrar usuário."]);
+    }
+  }
+
+  public function login($data) {
+    if (!isset($data->email, $data->senha)) {
+      echo json_encode(["success" => false, "message" => "E-mail e senha são obrigatórios."]);
+      return;
+    }
+
+    $this->usuario->email = $data->email;
+    $this->usuario->senha = $data->senha;
+
+    $result = $this->usuario->login();
+
+    if ($result) {
+      echo json_encode(["success" => true, "usuario" => $result]);
+    } else {
+      echo json_encode(["success" => false, "message" => "E-mail ou senha incorretos."]);
     }
   }
 
   public function readAll() {
-    $stmt = $this->usuario->readAll();
+    $stmt = $this->conn->prepare("SELECT id, nome_completo, email, data_nascimento FROM usuarios");
+    $stmt->execute();
     $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($usuarios);
-  }
-
-  public function login($data) {
-    if (!isset($data->usuario) || !isset($data->senha)) {
-      echo json_encode(["error" => "Usuário e senha são obrigatórios."]);
-      return;
-    }
-
-    $stmt = $this->usuario->findByUsuario($data->usuario);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($user && password_verify($data->senha, $user['senha'])) {
-      $token = base64_encode(random_bytes(24));
-
-      session_start();
-      $_SESSION['user'] = [
-        "id" => $user['id'],
-        "nome" => $user['nome'],
-        "usuario" => $user['usuario'],
-        "perfil" => $user['perfil'],
-        "token" => $token
-      ];
-
-      echo json_encode(["message" => "Login bem-sucedido!", "token" => $token, "usuario" => $_SESSION['user']]);
-    } else {
-      echo json_encode(["error" => "Usuário ou senha inválidos."]);
-    }
-  }
-
-  
-  public function logout() {
-    session_start();
-    session_destroy();
-    echo json_encode(["message" => "Logout realizado com sucesso."]);
   }
 }
 ?>

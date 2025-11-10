@@ -1,5 +1,31 @@
 import { Link } from "react-router-dom";
+import React, { useState } from "react";
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const response = await fetch("http://localhost/livros/api/index.php?action=login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, senha }),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      alert("✅ Login realizado com sucesso!");
+      localStorage.setItem("usuario", JSON.stringify(data.usuario));
+      window.location.href = "/user";
+    } else {
+      alert("❌ " + data.message);
+    }
+  };
+
   return (
     <>
       <div className="grid grid-cols-12 min-h-screen">

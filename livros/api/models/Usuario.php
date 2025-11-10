@@ -4,40 +4,44 @@ class Usuario {
   private $table = "usuarios";
 
   public $id;
-  public $nome;
-  public $usuario;
+  public $nome_completo;
+  public $email;
   public $senha;
-  public $perfil;
+  public $data_nascimento;
 
   public function __construct($db) {
     $this->conn = $db;
   }
 
-  public function create() {
-    $query = "INSERT INTO {$this->table} (nome, usuario, senha, perfil)
-              VALUES (:nome, :usuario, :senha, :perfil)";
+  // Cadastrar
+  public function cadastrar() {
+    $query = "INSERT INTO " . $this->table . " (nome_completo, email, senha, data_nascimento)
+              VALUES (:nome_completo, :email, :senha, :data_nascimento)";
+
     $stmt = $this->conn->prepare($query);
-    $this->senha = password_hash($this->senha, PASSWORD_BCRYPT);
-    $stmt->bindParam(':nome', $this->nome);
-    $stmt->bindParam(':usuario', $this->usuario);
-    $stmt->bindParam(':senha', $this->senha);
-    $stmt->bindParam(':perfil', $this->perfil);
+    $stmt->bindParam(":nome_completo", $this->nome_completo);
+    $stmt->bindParam(":email", $this->email);
+    $senhaHash = password_hash($this->senha, PASSWORD_DEFAULT);
+    $stmt->bindParam(":senha", $senhaHash);
+    $stmt->bindParam(":data_nascimento", $this->data_nascimento);
+
     return $stmt->execute();
   }
 
-  public function readAll() {
-    $query = "SELECT id, nome, usuario, perfil FROM {$this->table} ORDER BY id";
+  // Login
+  public function login() {
+    $query = "SELECT * FROM " . $this->table . " WHERE email = :email LIMIT 1";
     $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(":email", $this->email);
     $stmt->execute();
-    return $stmt;
-  }
 
-  public function findByUsuario($usuario) {
-    $query = "SELECT * FROM {$this->table} WHERE usuario = :usuario LIMIT 1";
-    $stmt = $this->conn->prepare($query);
-    $stmt->bindParam(':usuario', $usuario);
-    $stmt->execute();
-    return $stmt;
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($usuario && password_verify($this->senha, $usuario['senha'])) {
+      unset($usuario['senha']); // não retornar senha
+      return $usuario;
+    }
+    return false;
   }
 }
 ?>
