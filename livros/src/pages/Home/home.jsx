@@ -225,7 +225,7 @@ export default function Home() {
         </div>
       </header>
 
-      <div className="bg-[#FAF9F6] min-h-screen py-10">
+      <div className="bg-gray-100 min-h-screen py-10">
         <div className="container mx-auto">
           <h1 className="text-2xl font-bold mb-8 text-center">
             Livros em Destaque
