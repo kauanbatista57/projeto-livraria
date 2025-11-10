@@ -2,23 +2,26 @@
 class Database {
   private $host = "localhost";
   private $db_name = "livraria";
-  private $username = "postgres";
-  private $password = "123456"; 
+  private $username = "root";
+  private $password = "";
   public $conn;
 
   public function getConnection() {
     $this->conn = null;
+
     try {
-      // Driver pgsq
       $this->conn = new PDO(
-        "pgsql:host={$this->host};dbname={$this->db_name}",
+        "mysql:host={$this->host};dbname={$this->db_name}",
         $this->username,
         $this->password
       );
       $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $this->conn->exec("set names utf8");
     } catch (PDOException $exception) {
       echo json_encode(["error" => "Erro de conexão: " . $exception->getMessage()]);
+      exit;
     }
+
     return $this->conn;
   }
 }
