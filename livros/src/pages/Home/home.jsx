@@ -244,7 +244,7 @@ export default function Home() {
       </header>
 
 
-            <div className="relative w-full h-[250px] overflow-hidden lg:mt-10">
+            <div className="relative w-full h-[250px] overflow-hidden">
       {banners.map((img, index) => (
         <img
           key={index}
