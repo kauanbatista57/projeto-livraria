@@ -30,18 +30,18 @@ class UsuarioController {
     }
   }
 
-  public function login($data) {
-    if (empty($data->email) || empty($data->senha)) {
-      echo json_encode(["success" => false, "message" => "Preencha todos os campos."]);
-      return;
-    }
-
-    $this->usuario->email = $data->email;
-    $this->usuario->senha = $data->senha;
-
-    $resultado = $this->usuario->login();
-    echo json_encode($resultado);
+ public function login($data) {
+  if (empty($data->email) || empty($data->senha)) {
+    echo json_encode(["success" => false, "message" => "Preencha todos os campos."]);
+    return;
   }
+
+  $this->usuario->email = $data->email;
+  $this->usuario->senha = $data->senha;
+
+  $resultado = $this->usuario->login();
+  echo json_encode($resultado);
+}
 
   public function readAll() {
     $stmt = $this->conn->prepare("SELECT id, nome_completo, email, data_nascimento FROM usuarios");

@@ -20,15 +20,15 @@ $input = file_get_contents("php://input");
 $data = json_decode($input);
 
 switch ($method) {
-  case 'POST':
-    if ($action === 'login') {
-      $controller->login($data);
-    } elseif ($action === 'create') {
-      $controller->create($data);
-    } else {
-      echo json_encode(["success" => false, "message" => "Ação POST inválida."]);
-    }
-    break;
+ case 'POST':
+  if ($action === 'login') {
+    $controller->login($data);
+  } elseif ($action === 'create') {
+    $controller->create($data);
+  } else {
+    echo json_encode(["success" => false, "message" => "Ação POST inválida."]);
+  }
+  break;
 
   case 'GET':
     $controller->readAll();

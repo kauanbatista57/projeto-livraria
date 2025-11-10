@@ -3,26 +3,49 @@ import React, { useState } from "react";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost/projeto-de-apresenta-o/livros/api/index.php?action=login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, senha }),
-    });
+    if (!email || !senha) {
+      alert("⚠️ Preencha todos os campos!");
+      return;
+    }
 
-    const data = await response.json();
+    setLoading(true);
 
-    if (data.success) {
-      alert("✅ Login realizado com sucesso!");
-      localStorage.setItem("usuario", JSON.stringify(data.usuario));
-      window.location.href = "/user";
-    } else {
-      alert("❌ " + data.message);
+    try {
+      const response = await fetch(
+        "http://localhost/projeto-de-apresenta-o/livros/api/index.php?action=login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, senha }),
+        }
+      );
+
+      const text = await response.text();
+      let data;
+
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error("Retorno inválido do servidor: " + text);
+      }
+
+      if (data.success) {
+        alert("✅ Login realizado com sucesso!");
+        localStorage.setItem("usuario", JSON.stringify(data.usuario));
+        setTimeout(() => (window.location.href = "/"), 800);
+      } else {
+        alert("❌ " + (data.message || "E-mail ou senha incorretos."));
+      }
+    } catch (error) {
+      alert("❌ Erro: " + error.message);
+      console.error("Erro no login:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,45 +76,54 @@ export default function Login() {
           </p>
 
           {/* FORMULÁRIO */}
-          <form className="space-y-6">
-            <div>
-              <label className="block font-semibold text-gray-700 mb-1">
-                Email
-              </label>
-              <input
-                type="text"
-                placeholder="Informe seu Email"
-                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none"
-              />
-            </div>
+        <form className="space-y-6" onSubmit={handleLogin}>
+  <div>
+    <label className="block font-semibold text-gray-700 mb-1">
+      Email
+    </label>
+    <input
+      type="text"
+      placeholder="Informe seu Email"
+      className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none"
+      value={email} 
+      onChange={(e) => setEmail(e.target.value)} 
+    />
+  </div>
 
-            <div>
-              <label className="block font-semibold text-gray-700 mb-1">
-                Senha
-              </label>
-              <input
-                type="password"
-                placeholder="Informe sua senha"
-                className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none"
-              />
+  <div>
+    <label className="block font-semibold text-gray-700 mb-1">
+      Senha
+    </label>
+    <input
+      type="password"
+      placeholder="Informe sua senha"
+      className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none"
+      value={senha} 
+      onChange={(e) => setSenha(e.target.value)} 
+    />
 
-                <div className="text-right mt-2">
-                  <Link
-                    to="/cadastro"
-                    className="text-[#A0180E] hover:underline text-sm font-medium"
-                  >
-                    Cadastrar conta
-                  </Link>
-                </div>
-            </div>
+    <div className="text-right mt-2">
+      <Link
+        to="/cadastro"
+        className="text-[#A0180E] hover:underline text-sm font-medium"
+      >
+        Cadastrar conta
+      </Link>
+    </div>
+  </div>
 
-            <button
-              type="submit"
-              className="w-full py-3 bg-[#A0180E] text-white font-semibold rounded-full hover:bg-[#7e130b] transition"
-            >
-              Entrar
-            </button>
-          </form>
+  <button
+    type="submit"
+    disabled={loading}
+    className={`w-full py-3 font-semibold rounded-full transition ${
+      loading
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-[#A0180E] hover:bg-[#7e130b] text-white"
+    }`}
+  >
+    {loading ? "Entrando..." : "Entrar"}
+  </button>
+</form>
         </div>
       </div>
     </div>
