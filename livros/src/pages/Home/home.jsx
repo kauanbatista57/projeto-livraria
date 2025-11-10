@@ -249,7 +249,7 @@ export default function Home() {
           {/* Left side: logo */}
           <div className="flex items-center space-x-2">
             {/* Using a placeholder image/div for the logo */}
-            <div className="text-xl font-extrabold text-[#A0180E]">LIVRARIA</div>
+           <img src="/assets/icon.png" alt="" className="w-20 h-20"/>
           </div>
 
           {/* Right side: user + cart */}
