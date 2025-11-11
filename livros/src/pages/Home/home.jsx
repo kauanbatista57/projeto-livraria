@@ -145,7 +145,7 @@ export default function Home() {
         editora: "Todavia",
         preco: "R$ 84,90",
         imagem:
-          "https://livrariadavila.vtexassets.com/arquivos/ids/8044837-300-400?v=638980520138430000&width=300&height=400&aspect=true",
+          "https://livrariadavila.vtexassets.com/arquivos/ids/8075392-300-400?v=638984162819330000&width=300&height=400&aspect=true",
       },
       {
         id: 15,
@@ -314,7 +314,27 @@ export default function Home() {
         </div>
       </div>
 
+      
+
       <div className="bg-gray-100 min-h-screen py-10">
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 max-w-6xl mx-auto lg:mb-4">
+          <img
+            src="https://livrariadavila.vtexassets.com/assets/vtex.file-manager-graphql/images/d06879e2-a3d0-493d-971d-5811b4f9637a___3ec471ece1079cbde9c7f7bb291e927c.png"
+            alt="Imagem 1"
+            className="w-full h-auto object-cover rounded-lg"
+          />
+          <img
+            src="https://livrariadavila.vtexassets.com/assets/vtex.file-manager-graphql/images/2c1c425f-52bd-4e3a-b763-4edacfcb465d___3550271b75934a1c5b09de77193b9887.png"
+            alt="Imagem 2"
+            className="w-full h-auto object-cover rounded-lg"
+          />
+          <img
+            src="https://livrariadavila.vtexassets.com/assets/vtex.file-manager-graphql/images/e832f9b1-14fa-41de-9bb6-37ceb9b4a794___c1ba4cc54708723f122e9db4f87f2f59.png"
+            alt="Imagem 3"
+            className="w-full h-auto object-cover rounded-lg"
+          />
+        </div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold mb-10 text-center text-gray-700">
             Livros em Destaque
@@ -475,6 +495,7 @@ export default function Home() {
             </div>
           </div>
         )}
+
       </div>
 
       <footer className="bg-gray-900 text-gray-300 px-8 py-4 ">
