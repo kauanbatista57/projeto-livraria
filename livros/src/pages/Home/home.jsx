@@ -314,10 +314,7 @@ export default function Home() {
         </div>
       </div>
 
-      
-
       <div className="bg-gray-100 min-h-screen py-10">
-        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 max-w-6xl mx-auto lg:mb-4">
           <img
             src="https://livrariadavila.vtexassets.com/assets/vtex.file-manager-graphql/images/d06879e2-a3d0-493d-971d-5811b4f9637a___3ec471ece1079cbde9c7f7bb291e927c.png"
@@ -487,15 +484,17 @@ export default function Home() {
 
                     <span>{formatarPreco(subtotal)}</span>
                   </div>
-                  <button className="w-full bg-[#A0180E] text-white py-3 rounded-xl font-bold shadow-lg hover:bg-[#7e130b] transition duration-200 active:scale-[0.99]">
+                  <Link
+                    to="/pagamento"
+                    className="block w-full text-center bg-[#A0180E] text-white py-3 rounded-xl font-bold shadow-lg hover:bg-[#7e130b] transition duration-200 active:scale-[0.99]"
+                  >
                     Finalizar Compra
-                  </button>
+                  </Link>
                 </div>
               )}
             </div>
           </div>
         )}
-
       </div>
 
       <footer className="bg-gray-900 text-gray-300 px-8 py-4 ">

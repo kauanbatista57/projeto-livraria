@@ -8,6 +8,8 @@ import Login from "./pages/Login/login";
 import User from "./pages/User/user"
 import Pedidos from "./pages/Pedidos/pedidos";
 
+import Pagamentos from "./pages/Pagamento/pagemento";
+
 function RoutesApp() {
   return (
     <BrowserRouter>
@@ -19,6 +21,8 @@ function RoutesApp() {
          
          <Route path="/usuario" element={<User />} />
          <Route path="/pedidos" element={<Pedidos />} />
+
+         <Route path="/pagamento" element={<Pagamentos />} />
       </Routes>
     </BrowserRouter>
   );
