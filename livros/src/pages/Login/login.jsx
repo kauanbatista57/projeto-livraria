@@ -125,7 +125,7 @@ export default function Login() {
                   to="/cadastro"
                   className="text-[#A0180E] hover:underline text-sm font-medium"
                 >
-                  Cadastrar conta
+                  Cadastrar cont
                 </Link>
               </div>
             </div>
