@@ -1,23 +1,12 @@
-import { useState, useEffect, useMemo } from "react";
-import { ShoppingBag, User, X, Trash, LogOut} from "lucide-react";
+import React, { useState, useEffect, useMemo } from "react";
+import { ShoppingBag, LogOut, Moon, Sun } from "lucide-react";
 import { Link } from "react-router-dom";
-
-const parsePreco = (preco) =>
-  parseFloat(
-    preco.replace("R$", "").replace(/\./g, "").replace(",", ".").trim()
-  ) || 0;
-
-const formatarPreco = (valor = 0) => {
-  const num = typeof valor === "number" ? valor : Number(valor) || 0;
-  return num.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
-};
+import Swal from "sweetalert2";
 
 export default function Home() {
   const [openCart, setOpenCart] = useState(false);
   const [cartItems, setCartItems] = useState([]);
+  const [darkMode, setDarkMode] = useState(false);
 
   const livros = useMemo(
     () => [
@@ -57,7 +46,7 @@ export default function Home() {
         imagem:
           "https://livrariadavila.vtexassets.com/arquivos/ids/8043032-300-400?v=638980275563770000&width=300&height=400&aspect=true",
       },
-      {
+       {
         id: 5,
         titulo: "Guinness World Records 2026",
         autor: "Guinness World Records",
@@ -165,39 +154,81 @@ export default function Home() {
       "https://livrariadavila.vtexassets.com/assets/vtex.file-manager-graphql/images/e96c8031-a005-4eae-96d0-7f40eacc92c1___edebef67d5ff063517ef313210fc43d9.jpg",
       "https://livrariadavila.vtexassets.com/assets/vtex.file-manager-graphql/images/ec91cd9f-5242-4159-84ab-1868b43b9e0d___2b90637e45400acf8a236fad11f2fd01.png",
       "https://livrariadavila.vtexassets.com/assets/vtex.file-manager-graphql/images/e892b456-e9e1-4eea-976e-910d4a31940a___faad66c6dbfeb323062f0fab64dab6de.png",
-      "https://livrariadavila.vtexassets.com/assets/vtex.file-manager-graphql/images/a8970fb6-a809-45f5-94f5-ea8fcd80dc89___a4a15dd4461bd36572fe7b83f7b8cf6a.jpg",
     ],
     []
   );
 
   const [current, setCurrent] = useState(0);
 
-  // Derived State
   const totalItens = cartItems.reduce((acc, item) => acc + (item.qtd || 0), 0);
+  const parsePreco = (preco) =>
+    parseFloat(preco.replace("R$", "").replace(/\./g, "").replace(",", ".").trim()) || 0;
   const subtotal = cartItems.reduce(
     (acc, item) => acc + parsePreco(item.preco) * (item.qtd || 0),
     0
   );
 
-  // --- Effects ---
-
-  // Control scroll when the modal is open
   useEffect(() => {
+    // Bloqueia scroll com carrinho aberto
     document.body.style.overflow = openCart ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => (document.body.style.overflow = "");
   }, [openCart]);
 
-  // Carousel auto-slide
   useEffect(() => {
+    // Carrossel
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % banners.length);
     }, 4000);
     return () => clearInterval(interval);
   }, [banners.length]);
 
-  // --- Cart Handlers ---
+  useEffect(() => {
+    // Recupera tema salvo
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setDarkMode(true);
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    if (newMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  };
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Deseja realmente sair?",
+      text: "Você será desconectado da sua conta.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#A0180E",
+      cancelButtonColor: "#6B7280",
+      confirmButtonText: "Sim, sair",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("usuario");
+        Swal.fire({
+          icon: "success",
+          title: "Logout realizado",
+          text: "Você saiu da sua conta com sucesso.",
+          confirmButtonColor: "#A0180E",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => {
+          window.location.href = "/login";
+        });
+      }
+    });
+  };
 
   const adicionarAoCarrinho = (livro) => {
     setCartItems((prev) => {
@@ -209,165 +240,101 @@ export default function Home() {
       }
       return [...prev, { ...livro, qtd: 1 }];
     });
-    setOpenCart(true); // Open the modal when adding
-  };
-
-  const removerDoCarrinho = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const updateQuantity = (id, change) => {
-    setCartItems((prev) => {
-      const existingItem = prev.find((item) => item.id === id);
-      if (!existingItem) return prev;
-
-      const newQtd = existingItem.qtd + change;
-
-      if (newQtd <= 0) {
-        // Remove item if quantity is zero or less
-        return prev.filter((item) => item.id !== id);
-      } else {
-        // Update quantity
-        return prev.map((item) =>
-          item.id === id ? { ...item, qtd: newQtd } : item
-        );
-      }
-    });
+    setOpenCart(true);
   };
 
   return (
     <>
-      <style>{`
-        @keyframes slide-left {
-          from { transform: translateX(100%); }
-          to { transform: translateX(0); }
-        }
-        .animate-slide-left {
-          animation: slide-left 0.3s ease-out forwards;
-        }
-      `}</style>
-
-      <header className="bg-white shadow-md sticky top-0 z-10">
+      {/* HEADER */}
+      <header className="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-10 transition-colors">
         <div className="container mx-auto px-8 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <img src="/assets/icon.png" alt="" className="w-20 h-20" />
           </div>
 
-          <div className="flex items-center space-x-6">
-            <div className="flex items-center space-x-2 border border-gray-300 rounded-lg px-3 py-2 hover:border-[#A0180E] transition">
-              <div className="cursor-pointer">
-                <Link
-                  to="/usuario"
-                  className="text-white underline hover:text-gray-300 transition"
-                >
-                  {" "}
-                  <User className="w-5 h-5 text-gray-500 hover:text-[#A0180E]" />
-                </Link>
-              </div>
-            </div>
+          <div className="flex items-center gap-4">
+            {/* Botão tema */}
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:scale-110 transition"
+            >
+              {darkMode ? (
+                <Sun size={18} className="text-yellow-400" />
+              ) : (
+                <Moon size={18} className="text-gray-700" />
+              )}
+            </button>
 
+            {/* Carrinho */}
             <button
               onClick={() => setOpenCart(true)}
-              className="relative p-2 rounded-full hover:bg-gray-100 transition"
+              className="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
             >
-              <ShoppingBag className="w-6 h-6 text-gray-700 hover:text-[#A0180E] transition" />
+              <ShoppingBag className="w-6 h-6 text-gray-700 dark:text-gray-200 hover:text-[#A0180E]" />
               {totalItens > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#A0180E] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white">
+                <span className="absolute -top-1 -right-1 bg-[#A0180E] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white dark:border-gray-900">
                   {totalItens}
                 </span>
               )}
             </button>
 
-               <button className="flex items-center gap-2">
-                  <LogOut size={20} />
-                </button>
+            {/* Botão sair */}
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-[#A0180E] transition"
+            >
+              <LogOut size={20} />
+              <span>Sair</span>
+            </button>
           </div>
         </div>
       </header>
 
+      {/* BANNER */}
       <div className="relative w-full h-[150px] sm:h-[250px] lg:h-[350px] overflow-hidden shadow-inner">
         {banners.map((img, index) => (
           <img
             key={index}
             src={img}
-            alt={`Banner promocional ${index + 1}`}
+            alt={`Banner ${index + 1}`}
             className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-700 ${
               index === current ? "opacity-100" : "opacity-0"
             }`}
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src =
-                "https://placehold.co/1920x350/B6D7A8/ffffff?text=Livraria+Banner+Indisponível";
-            }}
           />
         ))}
-
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-          {banners.map((_, index) => (
-            <button
-              key={index}
-              aria-label={`Ir para slide ${index + 1}`}
-              onClick={() => setCurrent(index)}
-              className={`w-3 h-3 rounded-full transition-colors ${
-                current === index
-                  ? "bg-white ring-2 ring-gray-900"
-                  : "bg-gray-400"
-              }`}
-            />
-          ))}
-        </div>
       </div>
 
-      <div className="bg-gray-100 min-h-screen py-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 max-w-6xl mx-auto lg:mb-4">
-          <img
-            src="https://livrariadavila.vtexassets.com/assets/vtex.file-manager-graphql/images/d06879e2-a3d0-493d-971d-5811b4f9637a___3ec471ece1079cbde9c7f7bb291e927c.png"
-            alt="Imagem 1"
-            className="w-full h-auto object-cover rounded-lg"
-          />
-          <img
-            src="https://livrariadavila.vtexassets.com/assets/vtex.file-manager-graphql/images/2c1c425f-52bd-4e3a-b763-4edacfcb465d___3550271b75934a1c5b09de77193b9887.png"
-            alt="Imagem 2"
-            className="w-full h-auto object-cover rounded-lg"
-          />
-          <img
-            src="https://livrariadavila.vtexassets.com/assets/vtex.file-manager-graphql/images/e832f9b1-14fa-41de-9bb6-37ceb9b4a794___c1ba4cc54708723f122e9db4f87f2f59.png"
-            alt="Imagem 3"
-            className="w-full h-auto object-cover rounded-lg"
-          />
-        </div>
+      {/* CONTEÚDO */}
+      <div className="bg-gray-100 dark:bg-gray-950 min-h-screen py-10 transition-colors">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold mb-10 text-center text-gray-700">
+          <h1 className="text-3xl font-bold mb-10 text-center text-gray-700 dark:text-gray-100">
             Livros em Destaque
           </h1>
 
-          <div className="grid grid-cols-2  lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {livros.map((livro) => (
               <div
                 key={livro.id}
-                className="bg-white rounded-xl shadow-lg p-4 flex flex-col justify-between  overflow-hidden"
+                className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-4 flex flex-col justify-between transition-colors"
               >
                 <div className="flex justify-center mb-4 min-h-[224px]">
                   <img
                     src={livro.imagem}
                     alt={livro.titulo}
                     className="w-full max-w-[140px] h-56 object-contain rounded-lg shadow-inner"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src =
-                        "https://placehold.co/140x224/A0180E/ffffff?text=Capa";
-                    }}
                   />
                 </div>
 
                 <div className="flex-1">
-                  <h2 className="text-base font-bold mb-1 line-clamp-2 min-h-[40px]">
+                  <h2 className="text-base font-bold mb-1 text-gray-800 dark:text-gray-100 line-clamp-2">
                     {livro.titulo}
                   </h2>
-                  <p className="text-gray-600 text-sm line-clamp-1">
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">
                     {livro.autor}
                   </p>
-                  <p className="text-gray-500 text-xs mb-3">{livro.editora}</p>
+                  <p className="text-gray-500 dark:text-gray-500 text-xs mb-3">
+                    {livro.editora}
+                  </p>
                   <p className="text-xl font-extrabold text-[#A0180E] mb-4">
                     {livro.preco}
                   </p>
@@ -375,7 +342,7 @@ export default function Home() {
 
                 <button
                   onClick={() => adicionarAoCarrinho(livro)}
-                  className="bg-[#A0180E] text-white py-2.5 rounded-xl font-semibold shadow-md hover:bg-[#7e130b] transition duration-200 active:scale-[0.98]"
+                  className="bg-[#A0180E] text-white py-2.5 rounded-xl font-semibold shadow-md hover:bg-[#7e130b] transition"
                 >
                   Comprar
                 </button>
@@ -383,129 +350,13 @@ export default function Home() {
             ))}
           </div>
         </div>
-
-        {openCart && (
-          <div
-            className="fixed inset-0 bg-black/50 z-[9999] flex justify-end"
-            onClick={() => setOpenCart(false)}
-          >
-            <div
-              className="w-full max-w-sm bg-[#FAF9F6] h-full shadow-2xl flex flex-col relative p-6 animate-slide-left"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={() => setOpenCart(false)}
-                className="absolute top-4 right-4 text-gray-800 hover:text-[#A0180E] transition p-1"
-                aria-label="Fechar Carrinho"
-              >
-                <X className="w-6 h-6" />
-              </button>
-
-              <h2 className="text-2xl font-bold mb-6 mt-2 border-b pb-3">
-                Seu Carrinho ({totalItens} itens)
-              </h2>
-
-              <div className="flex-1 overflow-y-auto pr-2">
-                {cartItems.length === 0 ? (
-                  <p className="text-gray-500 text-center mt-10">
-                    Seu carrinho está vazio. Adicione alguns livros!
-                  </p>
-                ) : (
-                  cartItems.map((item) => (
-                    <div
-                      key={item.id}
-                      className="flex items-center gap-4 mb-4 border-b border-gray-200 pb-4 last:border-b-0 last:pb-0"
-                    >
-                      <img
-                        src={item.imagem}
-                        alt={item.titulo}
-                        className="w-16 h-20 object-contain rounded shadow-sm"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src =
-                            "https://placehold.co/64x80/cccccc/000000?text=Capa";
-                        }}
-                      />
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-semibold truncate">
-                          {item.titulo}
-                        </h3>
-                        <p className="text-gray-600 text-xs mb-1 truncate">
-                          {item.autor}
-                        </p>
-
-                        <p className="text-sm font-bold text-gray-900">
-                          {formatarPreco(parsePreco(item.preco) * item.qtd)}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {item.preco} cada
-                        </p>
-                      </div>
-
-                      <div className="flex items-center space-x-1 border rounded-lg overflow-hidden">
-                        <button
-                          onClick={() => updateQuantity(item.id, -1)}
-                          className="w-6 h-6 text-gray-600 hover:bg-gray-100 transition"
-                          aria-label="Diminuir quantidade"
-                        >
-                          -
-                        </button>
-                        <span className="text-sm font-medium w-4 text-center">
-                          {item.qtd}
-                        </span>
-                        <button
-                          onClick={() => updateQuantity(item.id, 1)}
-                          className="w-6 h-6 text-gray-600 hover:bg-gray-100 transition"
-                          aria-label="Aumentar quantidade"
-                        >
-                          +
-                        </button>
-                      </div>
-
-                      <button
-                        onClick={() => removerDoCarrinho(item.id)}
-                        className="text-gray-400 hover:text-red-600 p-1 ml-2 transition"
-                        aria-label="Remover item"
-                      >
-                        <Trash className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              {cartItems.length > 0 && (
-                <div className="border-t pt-4 bg-[#FAF9F6] sticky bottom-0">
-                  <div className="flex justify-between text-base mb-1">
-                    <span className="text-gray-700">Subtotal</span>
-
-                    <span className="font-semibold text-gray-900">
-                      {formatarPreco(subtotal)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between font-extrabold text-xl mb-4 text-[#A0180E]">
-                    <span>Total (com frete)</span>
-
-                    <span>{formatarPreco(subtotal)}</span>
-                  </div>
-                  <Link
-                    to="/pagamento"
-                    className="block w-full text-center bg-[#A0180E] text-white py-3 rounded-xl font-bold shadow-lg hover:bg-[#7e130b] transition duration-200 active:scale-[0.99]"
-                  >
-                    Finalizar Compra
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
       </div>
 
-      <footer className="bg-gray-900 text-gray-300 px-8 py-4 ">
-        <div className="container mx-auto px-4 text-center">
+      {/* FOOTER */}
+      <footer className="bg-gray-900 dark:bg-black text-gray-300 px-8 py-4 transition-colors">
+        <div className="container mx-auto text-center">
           <p className="text-sm">
-            &copy; {new Date().getFullYear()} Livraria. Todos os direitos
-            reservados.
+            &copy; {new Date().getFullYear()} Livraria. Todos os direitos reservados.
           </p>
           <p className="text-xs mt-2 text-gray-500">
             Protótipo desenvolvido por Kauan Batista / Pedro / Felipe
