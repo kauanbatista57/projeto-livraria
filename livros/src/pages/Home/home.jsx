@@ -277,6 +277,8 @@ export default function Home() {
                 </span>
               )}
             </button>
+
+            <button className="bg-[#A0180E] text-white py-2 px-4 rounded-xl font-semibold shadow-md hover:bg-[#7e130b]">Logout</button>
           </div>
         </div>
       </header>

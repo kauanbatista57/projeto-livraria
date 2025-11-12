@@ -44,9 +44,15 @@ export default function User() {
       <div className="flex-1 flex items-center justify-center px-4">
         <div className="container mx-auto max-w-3xl bg-white rounded-xl shadow-md p-8">
           {/* Título */}
-          <div className="flex items-center gap-2 mb-6">
-            <span className="text-orange-500 text-2xl">👤</span>
-            <h1 className="text-2xl font-bold text-gray-800">MEUS DADOS</h1>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2">
+              <span className="text-orange-500 text-2xl">👤</span>
+              <h1 className="text-2xl font-bold text-gray-800">MEUS DADOS</h1>
+            </div>
+
+            <button className="bg-[#A0180E] text-white py-2 px-4 rounded-xl font-semibold shadow-md hover:bg-[#7e130b]">
+              Logout
+            </button>
           </div>
 
           {/* Campos */}

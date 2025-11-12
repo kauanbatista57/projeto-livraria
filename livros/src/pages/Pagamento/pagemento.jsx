@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Eye, Landmark, CreditCardIcon, CircleDot, Circle } from "lucide-react";
-
 export default function Pagamento() {
   const [metodo, setMetodo] = useState("pix");
 
