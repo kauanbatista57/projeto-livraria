@@ -19,7 +19,7 @@ export default function Home() {
   const [cartItems, setCartItems] = useState([]);
   const [darkMode, setDarkMode] = useState(false);
 
-  // Lista de livros
+  // Lista de livros (mantida a mesma)
   const livros = useMemo(
     () => [
       {
@@ -58,7 +58,7 @@ export default function Home() {
         imagem:
           "https://livrariadavila.vtexassets.com/arquivos/ids/8020864-300-400?v=638977484381130000&width=300&height=400&aspect=true",
       },
-       {
+      {
         id: 5,
         titulo: "Guinness World Records 2026",
         autor: "Guinness World Records",
@@ -177,7 +177,7 @@ export default function Home() {
     0
   );
 
-  // Efeitos
+  // Efeitos (mantidos os mesmos)
   useEffect(() => {
     document.body.style.overflow = openCart ? "hidden" : "";
     return () => {
@@ -192,6 +192,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [banners.length]);
 
+  // Carrega o tema salvo no localStorage e aplica a classe 'dark' ao <html>
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
@@ -200,7 +201,7 @@ export default function Home() {
     }
   }, []);
 
-  // Handlers
+  // Função para alternar o modo escuro
   const toggleDarkMode = () => {
     const newMode = !darkMode;
     setDarkMode(newMode);
@@ -282,12 +283,24 @@ export default function Home() {
         .animate-slide-left {
           animation: slide-left 0.3s ease-out forwards;
         }
+        /* Otimização: Aplicar filtro de inversão no logo em Dark Mode */
+        .invert-dark:not(.dark) {
+          filter: invert(0);
+        }
+        .dark .invert-dark {
+          filter: invert(1);
+        }
       `}</style>
 
       {/* HEADER */}
       <header className="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-10">
         <div className="container mx-auto px-8 py-4 flex items-center justify-between">
-          <img src="/assets/icon.png" alt="" className="w-20 h-20" />
+          {/* CORREÇÃO 1: Adicionando a classe 'invert-dark' à imagem para inverter cores no dark mode */}
+          <img 
+            src="/assets/icon.png" 
+            alt="Logo da Livraria" 
+            className="w-20 h-20 invert-dark transition-filter duration-300" // Adicionado 'invert-dark'
+          /> 
           <div className="flex items-center gap-6">
             {/* Perfil */}
             <Link
@@ -312,11 +325,11 @@ export default function Home() {
             {/* Carrinho */}
             <button
               onClick={() => setOpenCart(true)}
-              className="relative p-2 rounded-full hover:bg-gray-100 transition"
+              className="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition"
             >
-              <ShoppingBag className="w-6 h-6 text-gray-700 hover:text-[#A0180E] transition" />
+              <ShoppingBag className="w-6 h-6 text-gray-700 dark:text-gray-300 hover:text-[#A0180E] transition" />
               {totalItens > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#A0180E] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white">
+                <span className="absolute -top-1 -right-1 bg-[#A0180E] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white dark:border-gray-900">
                   {totalItens}
                 </span>
               )}
@@ -364,8 +377,14 @@ export default function Home() {
                   alt={livro.titulo}
                   className="w-full h-56 object-contain mb-4"
                 />
-                <h2 className="text-base font-bold mb-1">{livro.titulo}</h2>
-                <p className="text-gray-500 text-sm mb-2">{livro.autor}</p>
+                {/* CORREÇÃO 2: Aplicando classes de texto para Dark Mode */}
+                <h2 className="text-base font-bold mb-1 text-gray-800 dark:text-gray-100">
+                  {livro.titulo}
+                </h2>
+                {/* CORREÇÃO 3: Aplicando classes de texto para Dark Mode */}
+                <p className="text-gray-500 text-sm mb-2 dark:text-gray-400">
+                  {livro.autor}
+                </p>
                 <p className="text-xl font-extrabold text-[#A0180E] mb-4">
                   {livro.preco}
                 </p>
@@ -381,37 +400,37 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Carrinho */}
+      {/* Carrinho (Drawer) - Já adaptado na resposta anterior, mas revisado para consistência */}
       {openCart && (
         <div
           className="fixed inset-0 bg-black/50 z-[9999] flex justify-end"
           onClick={() => setOpenCart(false)}
         >
           <div
-            className="w-full max-w-sm bg-[#FAF9F6] h-full shadow-2xl flex flex-col relative p-6 animate-slide-left"
+            className="w-full max-w-sm bg-white dark:bg-gray-900 h-full shadow-2xl flex flex-col relative p-6 animate-slide-left"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setOpenCart(false)}
-              className="absolute top-4 right-4 text-gray-800 hover:text-[#A0180E]"
+              className="absolute top-4 right-4 text-gray-800 dark:text-gray-200 hover:text-[#A0180E]"
             >
               <X className="w-6 h-6" />
             </button>
 
-            <h2 className="text-2xl font-bold mb-6 mt-2 border-b pb-3">
+            <h2 className="text-2xl font-bold mb-6 mt-2 border-b dark:border-gray-700 pb-3 text-gray-800 dark:text-gray-200">
               Seu Carrinho ({totalItens} itens)
             </h2>
 
             <div className="flex-1 overflow-y-auto pr-2">
               {cartItems.length === 0 ? (
-                <p className="text-gray-500 text-center mt-10">
+                <p className="text-gray-500 dark:text-gray-400 text-center mt-10">
                   Seu carrinho está vazio.
                 </p>
               ) : (
                 cartItems.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center gap-4 mb-4 border-b border-gray-200 pb-4"
+                    className="flex items-center gap-4 mb-4 border-b border-gray-200 dark:border-gray-700 pb-4"
                   >
                     <img
                       src={item.imagem}
@@ -419,23 +438,23 @@ export default function Home() {
                       className="w-16 h-20 object-contain"
                     />
                     <div className="flex-1">
-                      <h3 className="text-sm font-semibold">{item.titulo}</h3>
-                      <p className="text-xs text-gray-600">{item.autor}</p>
-                      <p className="text-sm font-bold">
+                      <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">{item.titulo}</h3>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">{item.autor}</p>
+                      <p className="text-sm font-bold text-gray-900 dark:text-gray-100">
                         {formatarPreco(parsePreco(item.preco) * item.qtd)}
                       </p>
                     </div>
-                    <div className="flex items-center border rounded-lg overflow-hidden">
+                    <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200">
                       <button
                         onClick={() => updateQuantity(item.id, -1)}
-                        className="w-6 h-6 hover:bg-gray-100"
+                        className="w-6 h-6 hover:bg-gray-100 dark:hover:bg-gray-700"
                       >
                         -
                       </button>
                       <span className="px-2">{item.qtd}</span>
                       <button
                         onClick={() => updateQuantity(item.id, 1)}
-                        className="w-6 h-6 hover:bg-gray-100"
+                        className="w-6 h-6 hover:bg-gray-100 dark:hover:bg-gray-700"
                       >
                         +
                       </button>
@@ -452,10 +471,10 @@ export default function Home() {
             </div>
 
             {cartItems.length > 0 && (
-              <div className="border-t pt-4 bg-[#FAF9F6] sticky bottom-0">
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-4 bg-white dark:bg-gray-900 sticky bottom-0">
                 <div className="flex justify-between text-base mb-1">
-                  <span className="text-gray-700">Subtotal</span>
-                  <span className="font-semibold text-gray-900">
+                  <span className="text-gray-700 dark:text-gray-300">Subtotal</span>
+                  <span className="font-semibold text-gray-900 dark:text-gray-100">
                     {formatarPreco(subtotal)}
                   </span>
                 </div>
@@ -470,6 +489,17 @@ export default function Home() {
           </div>
         </div>
       )}
+      <footer className="bg-gray-900 text-gray-300 px-8 py-4 ">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-sm">
+            &copy; {new Date().getFullYear()} Livraria. Todos os direitos
+            reservados.
+          </p>
+          <p className="text-xs mt-2 text-gray-500">
+            Protótipo desenvolvido por Kauan Batista / Pedro / Felipe
+          </p>
+        </div>
+      </footer>
     </>
   );
 }
