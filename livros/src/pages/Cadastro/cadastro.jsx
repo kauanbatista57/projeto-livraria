@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Swal from "sweetalert2";
 
 export default function Cadastro() {
   const [nome, setNome] = useState("");
@@ -11,14 +12,20 @@ export default function Cadastro() {
     e.preventDefault();
 
     if (!nome || !email || !senha || !dataNascimento) {
-      alert("⚠️ Preencha todos os campos!");
+      Swal.fire({
+        icon: "warning",
+        title: "Campos obrigatórios",
+        text: "Preencha todos os campos!",
+        confirmButtonColor: "#A0180E",
+      });
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost/projeto-de-apresenta-o/livros/api/index.php?action=create",
+      const response = await fetch(
+        "http://localhost/projeto-de-apresenta-o/livros/api/index.php?action=create",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -41,13 +48,30 @@ export default function Cadastro() {
       }
 
       if (data.success) {
-        alert("✅ Cadastro realizado com sucesso!");
-        setTimeout(() => (window.location.href = "/login"), 800);
+        Swal.fire({
+          icon: "success",
+          title: "Cadastro realizado!",
+          text: "Usuário cadastrado com sucesso!",
+          confirmButtonColor: "#A0180E",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+        setTimeout(() => (window.location.href = "/login"), 2000);
       } else {
-        alert("❌ Erro: " + (data.message || "Não foi possível cadastrar."));
+        Swal.fire({
+          icon: "error",
+          title: "Erro no cadastro",
+          text: data.message || "Não foi possível cadastrar.",
+          confirmButtonColor: "#A0180E",
+        });
       }
     } catch (error) {
-      alert("❌ Erro: " + error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Erro no servidor",
+        text: error.message,
+        confirmButtonColor: "#A0180E",
+      });
       console.error("Erro no cadastro:", error);
     } finally {
       setLoading(false);
@@ -128,11 +152,10 @@ export default function Cadastro() {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-3 font-semibold rounded-full transition ${
-                loading
+              className={`w-full py-3 font-semibold rounded-full transition ${loading
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-[#A0180E] hover:bg-[#7e130b] text-white"
-              }`}
+                }`}
             >
               {loading ? "Cadastrando..." : "Cadastrar"}
             </button>

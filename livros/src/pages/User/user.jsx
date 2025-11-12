@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SidebarMenu from "../../Components/SidebarMenu/SidebarMenu";
 import { LogOut } from "lucide-react";
+import Swal from "sweetalert2";
 
 export default function User() {
   const [usuario, setUsuario] = useState(null);
@@ -17,13 +18,53 @@ export default function User() {
       setEmail(parsed.email || "");
       setDataNascimento(parsed.data_nascimento || "");
     } else {
-      alert("⚠️ Nenhum usuário logado!");
-      window.location.href = "/login";
+      Swal.fire({
+        icon: "warning",
+        title: "Acesso negado",
+        text: "Você precisa estar logado para acessar essa página.",
+        confirmButtonColor: "#A0180E",
+      }).then(() => {
+        window.location.href = "/login";
+      });
     }
   }, []);
 
   const handleSave = () => {
-    alert("🔒 Alterações salvas localmente (exemplo).");
+    Swal.fire({
+      icon: "success",
+      title: "Alterações salvas!",
+      text: "As alterações foram salvas localmente (exemplo).",
+      confirmButtonColor: "#A0180E",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  };
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Deseja realmente sair?",
+      text: "Você será desconectado da sua conta.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#A0180E",
+      cancelButtonColor: "#6B7280",
+      confirmButtonText: "Sim, sair",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("usuario");
+        Swal.fire({
+          icon: "success",
+          title: "Logout realizado",
+          text: "Você saiu da sua conta com sucesso.",
+          confirmButtonColor: "#A0180E",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => {
+          window.location.href = "/login";
+        });
+      }
+    });
   };
 
   if (!usuario) {
@@ -51,8 +92,12 @@ export default function User() {
               <h1 className="text-2xl font-bold text-gray-800">MEUS DADOS</h1>
             </div>
 
-            <button className="flex items-center gap-2">
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 text-gray-700 hover:text-[#A0180E] transition"
+            >
               <LogOut size={20} />
+              <span>Sair</span>
             </button>
           </div>
 
