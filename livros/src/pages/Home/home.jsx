@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { ShoppingBag, User, X, Trash } from "lucide-react";
+import { ShoppingBag, User, X, Trash, LogOut} from "lucide-react";
 import { Link } from "react-router-dom";
 
 const parsePreco = (preco) =>
@@ -278,7 +278,9 @@ export default function Home() {
               )}
             </button>
 
-            <button className="bg-[#A0180E] text-white py-2 px-4 rounded-xl font-semibold shadow-md hover:bg-[#7e130b]">Logout</button>
+               <button className="flex items-center gap-2">
+                  <LogOut size={20} />
+                </button>
           </div>
         </div>
       </header>

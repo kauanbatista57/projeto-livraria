@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SidebarMenu from "../../Components/SidebarMenu/SidebarMenu";
+import { LogOut } from "lucide-react";
 
 export default function User() {
   const [usuario, setUsuario] = useState(null);
@@ -50,8 +51,8 @@ export default function User() {
               <h1 className="text-2xl font-bold text-gray-800">MEUS DADOS</h1>
             </div>
 
-            <button className="bg-[#A0180E] text-white py-2 px-4 rounded-xl font-semibold shadow-md hover:bg-[#7e130b]">
-              Logout
+            <button className="flex items-center gap-2">
+              <LogOut size={20} />
             </button>
           </div>
 
