@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
-import { ShoppingBag, User, X, Trash, LogOut} from "lucide-react";
+import { ShoppingBag, User, X, Trash, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const parsePreco = (preco) =>
   parseFloat(
@@ -172,16 +173,12 @@ export default function Home() {
 
   const [current, setCurrent] = useState(0);
 
-  // Derived State
   const totalItens = cartItems.reduce((acc, item) => acc + (item.qtd || 0), 0);
   const subtotal = cartItems.reduce(
     (acc, item) => acc + parsePreco(item.preco) * (item.qtd || 0),
     0
   );
 
-  // --- Effects ---
-
-  // Control scroll when the modal is open
   useEffect(() => {
     document.body.style.overflow = openCart ? "hidden" : "";
     return () => {
@@ -189,15 +186,12 @@ export default function Home() {
     };
   }, [openCart]);
 
-  // Carousel auto-slide
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % banners.length);
     }, 4000);
     return () => clearInterval(interval);
   }, [banners.length]);
-
-  // --- Cart Handlers ---
 
   const adicionarAoCarrinho = (livro) => {
     setCartItems((prev) => {
@@ -209,7 +203,7 @@ export default function Home() {
       }
       return [...prev, { ...livro, qtd: 1 }];
     });
-    setOpenCart(true); // Open the modal when adding
+    setOpenCart(true);
   };
 
   const removerDoCarrinho = (id) => {
@@ -224,13 +218,38 @@ export default function Home() {
       const newQtd = existingItem.qtd + change;
 
       if (newQtd <= 0) {
-        // Remove item if quantity is zero or less
         return prev.filter((item) => item.id !== id);
       } else {
-        // Update quantity
         return prev.map((item) =>
           item.id === id ? { ...item, qtd: newQtd } : item
         );
+      }
+    });
+  };
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Deseja realmente sair?",
+      text: "Você será desconectado da sua conta.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#A0180E",
+      cancelButtonColor: "#6B7280",
+      confirmButtonText: "Sim, sair",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("usuario");
+        Swal.fire({
+          icon: "success",
+          title: "Logout realizado",
+          text: "Você saiu da sua conta com sucesso.",
+          confirmButtonColor: "#A0180E",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => {
+          window.location.href = "/login";
+        });
       }
     });
   };
@@ -260,7 +279,6 @@ export default function Home() {
                   to="/usuario"
                   className="text-white underline hover:text-gray-300 transition"
                 >
-                  {" "}
                   <User className="w-5 h-5 text-gray-500 hover:text-[#A0180E]" />
                 </Link>
               </div>
@@ -278,9 +296,12 @@ export default function Home() {
               )}
             </button>
 
-               <button className="flex items-center gap-2">
-                  <LogOut size={20} />
-                </button>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 text-gray-700 hover:text-[#A0180E] transition"
+            >
+              <LogOut size={20} />
+            </button>
           </div>
         </div>
       </header>
@@ -291,9 +312,8 @@ export default function Home() {
             key={index}
             src={img}
             alt={`Banner promocional ${index + 1}`}
-            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-700 ${
-              index === current ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-700 ${index === current ? "opacity-100" : "opacity-0"
+              }`}
             onError={(e) => {
               e.target.onerror = null;
               e.target.src =
@@ -308,11 +328,10 @@ export default function Home() {
               key={index}
               aria-label={`Ir para slide ${index + 1}`}
               onClick={() => setCurrent(index)}
-              className={`w-3 h-3 rounded-full transition-colors ${
-                current === index
+              className={`w-3 h-3 rounded-full transition-colors ${current === index
                   ? "bg-white ring-2 ring-gray-900"
                   : "bg-gray-400"
-              }`}
+                }`}
             />
           ))}
         </div>
@@ -341,11 +360,11 @@ export default function Home() {
             Livros em Destaque
           </h1>
 
-          <div className="grid grid-cols-2  lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {livros.map((livro) => (
               <div
                 key={livro.id}
-                className="bg-white rounded-xl shadow-lg p-4 flex flex-col justify-between  overflow-hidden"
+                className="bg-white rounded-xl shadow-lg p-4 flex flex-col justify-between overflow-hidden"
               >
                 <div className="flex justify-center mb-4 min-h-[224px]">
                   <img
@@ -361,7 +380,7 @@ export default function Home() {
                 </div>
 
                 <div className="flex-1">
-                  <h2 className="text-base font-bold mb-1 line-clamp-2 min-h-[40px]">
+                  <h2 className="text-base font-bold mb-1 line-clamp-2 min-h-[40px] text-gray-800">
                     {livro.titulo}
                   </h2>
                   <p className="text-gray-600 text-sm line-clamp-1">
@@ -401,7 +420,7 @@ export default function Home() {
                 <X className="w-6 h-6" />
               </button>
 
-              <h2 className="text-2xl font-bold mb-6 mt-2 border-b pb-3">
+              <h2 className="text-2xl font-bold mb-6 mt-2 border-b pb-3 text-gray-800">
                 Seu Carrinho ({totalItens} itens)
               </h2>
 
@@ -427,7 +446,7 @@ export default function Home() {
                         }}
                       />
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-semibold truncate">
+                        <h3 className="text-sm font-semibold truncate text-gray-800">
                           {item.titulo}
                         </h3>
                         <p className="text-gray-600 text-xs mb-1 truncate">
