@@ -1,11 +1,72 @@
 import React, { useState } from "react";
+import Swal from "sweetalert2";
 import { Eye, Landmark, CreditCardIcon, CircleDot, Circle } from "lucide-react";
+
 export default function Pagamento() {
   const [metodo, setMetodo] = useState("pix");
+
+  const [numeroCartao, setNumeroCartao] = useState("");
+  const [cvc, setCvc] = useState("");
+
+  const finalizarCompra = () => {
+    Swal.fire({
+      icon: "success",
+      title: "Compra realizada!",
+      text: "🎉 Seu pedido foi concluído com sucesso.",
+      confirmButtonColor: "#A0180E",
+      timer: 1800,
+      showConfirmButton: false,
+    });
+
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 1800);
+  };
+
+  const validarPagamento = () => {
+    if (metodo === "pix") {
+      finalizarCompra();
+      return;
+    }
+
+    if (numeroCartao.trim() === "" || cvc.trim() === "") {
+      Swal.fire({
+        icon: "error",
+        title: "Campos obrigatórios!",
+        text: "Preencha o número do cartão e o CVC para finalizar a compra.",
+        confirmButtonColor: "#A0180E",
+      });
+      return;
+    }
+
+    if (numeroCartao.length < 12) {
+      Swal.fire({
+        icon: "error",
+        title: "Número inválido!",
+        text: "O número do cartão deve conter pelo menos 12 dígitos.",
+        confirmButtonColor: "#A0180E",
+      });
+      return;
+    }
+
+    if (cvc.length < 3) {
+      Swal.fire({
+        icon: "error",
+        title: "CVC inválido!",
+        text: "O CVC deve ter pelo menos 3 dígitos.",
+        confirmButtonColor: "#A0180E",
+      });
+      return;
+    }
+
+    finalizarCompra();
+  };
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
+
+        {/* LADO ESQUERDO */}
         <div className="col-span-2 bg-white rounded-lg shadow p-6">
           <div className="flex items-center gap-2 mb-4">
             <Eye className="text-orange-600" size={20} />
@@ -14,11 +75,11 @@ export default function Pagamento() {
             </h2>
           </div>
 
+          {/* MÉTODO PIX */}
           <div
             onClick={() => setMetodo("pix")}
-            className={`border rounded-md p-4 mb-4 cursor-pointer transition ${
-              metodo === "pix" ? "border-orange-600" : "border-gray-300"
-            }`}
+            className={`border rounded-md p-4 mb-4 cursor-pointer transition ${metodo === "pix" ? "border-orange-600" : "border-gray-300"
+              }`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -30,21 +91,17 @@ export default function Pagamento() {
                 <span className="font-semibold text-gray-800">PIX</span>
               </div>
               <Landmark
-                className={`${
-                  metodo === "pix" ? "text-orange-600" : "text-gray-400"
-                }`}
+                className={`${metodo === "pix" ? "text-orange-600" : "text-gray-400"
+                  }`}
               />
             </div>
 
-            {/* Descrição */}
             <p className="mt-2 text-sm text-gray-600">
               Até <span className="font-bold">22% de desconto</span> com{" "}
               <span className="font-bold">aprovação imediata</span> que torna a{" "}
-              <span className="font-bold">expedição mais rápida</span> do
-              pedido.
+              <span className="font-bold">expedição mais rápida</span> do pedido.
             </p>
 
-            {/* QR Code */}
             {metodo === "pix" && (
               <div className="mt-4 flex flex-col items-center">
                 <img
@@ -59,12 +116,11 @@ export default function Pagamento() {
             )}
           </div>
 
-          {/* CARTÃO DE CRÉDITO */}
+          {/* MÉTODO CARTÃO */}
           <div
             onClick={() => setMetodo("cartao")}
-            className={`border rounded-md p-4 mb-4 cursor-pointer transition ${
-              metodo === "cartao" ? "border-orange-600" : "border-gray-300"
-            }`}
+            className={`border rounded-md p-4 mb-4 cursor-pointer transition ${metodo === "cartao" ? "border-orange-600" : "border-gray-300"
+              }`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -78,9 +134,8 @@ export default function Pagamento() {
                 </span>
               </div>
               <CreditCardIcon
-                className={`${
-                  metodo === "cartao" ? "text-orange-600" : "text-gray-400"
-                }`}
+                className={`${metodo === "cartao" ? "text-orange-600" : "text-gray-400"
+                  }`}
               />
             </div>
 
@@ -92,16 +147,21 @@ export default function Pagamento() {
                   </label>
                   <input
                     type="text"
+                    value={numeroCartao}
+                    onChange={(e) => setNumeroCartao(e.target.value)}
                     placeholder="0000 0000 0000 0000"
                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-orange-600"
                   />
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     CVC
                   </label>
                   <input
                     type="text"
+                    value={cvc}
+                    onChange={(e) => setCvc(e.target.value)}
                     placeholder="123"
                     className="w-1/3 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-orange-600"
                   />
@@ -111,6 +171,7 @@ export default function Pagamento() {
           </div>
         </div>
 
+        {/* LADO DIREITO */}
         <div className="space-y-4">
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center gap-2 mb-4">
@@ -144,15 +205,21 @@ export default function Pagamento() {
             </div>
           </div>
 
+          {/* BOTÕES */}
           <div className="bg-white rounded-lg shadow p-6">
-            <button className="w-full bg-[#A0180E] text-white font-semibold py-3 rounded-md hover:bg-[#7e130b]  transition">
-              Continuar
+            <button
+              onClick={validarPagamento}
+              className="w-full bg-[#A0180E] text-white font-semibold py-3 rounded-md hover:bg-[#7e130b] transition"
+            >
+              Finalizar Compra
             </button>
+
             <button className="w-full border border-[#A0180E] text-[#7e130b] font-semibold py-3 rounded-md mt-3 hover:bg-orange-50 transition">
               Voltar
             </button>
           </div>
         </div>
+
       </div>
     </div>
   );
