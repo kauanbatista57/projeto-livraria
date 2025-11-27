@@ -3,12 +3,14 @@ import Swal from "sweetalert2";
 import { Eye, Landmark, CreditCardIcon, CircleDot, Circle } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Pagamento() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   // valorFinal vai ser a string formatada ex: "R$ 505,25"
-  const { valorFinal } = location.state || {};
+  const { valorFinal, livro } = location.state || {};
 
   const [metodo, setMetodo] = useState("pix");
 
@@ -26,7 +28,13 @@ export default function Pagamento() {
     });
 
     setTimeout(() => {
-      window.location.href = "/";
+      navigate("/pedidos", {
+  state: {
+    livroComprado: livro,
+    valorFinal: valorFinal,
+    data: new Date()
+  }
+});
     }, 1800);
   };
 

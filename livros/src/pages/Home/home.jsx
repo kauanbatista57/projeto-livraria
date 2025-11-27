@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { ShoppingBag, User, X, Trash, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -172,6 +173,22 @@ export default function Home() {
   );
 
   const [current, setCurrent] = useState(0);
+  const navigate = useNavigate();
+  const irParaPagamento = () => {
+    navigate("/pagamento", {
+      state: {
+        itens: cartItems.map((item) => ({
+          id: item.id,
+          titulo: item.titulo,
+          imagem: item.imagem,
+          preco: item.preco,
+          qtd: item.qtd,
+          autor: item.autor,
+          editora: item.editora,
+        })),
+      },
+    });
+  };
 
   const totalItens = cartItems.reduce((acc, item) => acc + (item.qtd || 0), 0);
   const subtotal = cartItems.reduce(
@@ -312,8 +329,9 @@ export default function Home() {
             key={index}
             src={img}
             alt={`Banner promocional ${index + 1}`}
-            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-700 ${index === current ? "opacity-100" : "opacity-0"
-              }`}
+            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-700 ${
+              index === current ? "opacity-100" : "opacity-0"
+            }`}
             onError={(e) => {
               e.target.onerror = null;
               e.target.src =
@@ -328,10 +346,11 @@ export default function Home() {
               key={index}
               aria-label={`Ir para slide ${index + 1}`}
               onClick={() => setCurrent(index)}
-              className={`w-3 h-3 rounded-full transition-colors ${current === index
+              className={`w-3 h-3 rounded-full transition-colors ${
+                current === index
                   ? "bg-white ring-2 ring-gray-900"
                   : "bg-gray-400"
-                }`}
+              }`}
             />
           ))}
         </div>
@@ -508,8 +527,15 @@ export default function Home() {
                     <span>{formatarPreco(subtotal)}</span>
                   </div>
                   <Link
+                    onClick={irParaPagamento}
                     to="/pagamento"
-                    state={{ valorFinal: formatarPreco(subtotal) }}
+                    state={{
+                      valorFinal: formatarPreco(subtotal),
+                      livro: {
+                        titulo: cartItems[0]?.titulo,
+                        imagem: cartItems[0]?.imagem,
+                      },
+                    }}
                     className="block w-full text-center bg-[#A0180E] text-white py-3 rounded-xl font-bold shadow-lg hover:bg-[#7e130b] transition duration-200 active:scale-[0.99]"
                   >
                     Finalizar Compra
