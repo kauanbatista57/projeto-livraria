@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { Eye, Landmark, CreditCardIcon, CircleDot, Circle } from "lucide-react";
+import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Pagamento() {
+  const location = useLocation();
+
+  // valorFinal vai ser a string formatada ex: "R$ 505,25"
+  const { valorFinal } = location.state || {};
+
   const [metodo, setMetodo] = useState("pix");
 
   const [numeroCartao, setNumeroCartao] = useState("");
@@ -65,7 +72,6 @@ export default function Pagamento() {
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
-
         {/* LADO ESQUERDO */}
         <div className="col-span-2 bg-white rounded-lg shadow p-6">
           <div className="flex items-center gap-2 mb-4">
@@ -78,8 +84,9 @@ export default function Pagamento() {
           {/* MÉTODO PIX */}
           <div
             onClick={() => setMetodo("pix")}
-            className={`border rounded-md p-4 mb-4 cursor-pointer transition ${metodo === "pix" ? "border-orange-600" : "border-gray-300"
-              }`}
+            className={`border rounded-md p-4 mb-4 cursor-pointer transition ${
+              metodo === "pix" ? "border-orange-600" : "border-gray-300"
+            }`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -91,15 +98,17 @@ export default function Pagamento() {
                 <span className="font-semibold text-gray-800">PIX</span>
               </div>
               <Landmark
-                className={`${metodo === "pix" ? "text-orange-600" : "text-gray-400"
-                  }`}
+                className={`${
+                  metodo === "pix" ? "text-orange-600" : "text-gray-400"
+                }`}
               />
             </div>
 
             <p className="mt-2 text-sm text-gray-600">
               Até <span className="font-bold">22% de desconto</span> com{" "}
               <span className="font-bold">aprovação imediata</span> que torna a{" "}
-              <span className="font-bold">expedição mais rápida</span> do pedido.
+              <span className="font-bold">expedição mais rápida</span> do
+              pedido.
             </p>
 
             {metodo === "pix" && (
@@ -119,8 +128,9 @@ export default function Pagamento() {
           {/* MÉTODO CARTÃO */}
           <div
             onClick={() => setMetodo("cartao")}
-            className={`border rounded-md p-4 mb-4 cursor-pointer transition ${metodo === "cartao" ? "border-orange-600" : "border-gray-300"
-              }`}
+            className={`border rounded-md p-4 mb-4 cursor-pointer transition ${
+              metodo === "cartao" ? "border-orange-600" : "border-gray-300"
+            }`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -134,8 +144,9 @@ export default function Pagamento() {
                 </span>
               </div>
               <CreditCardIcon
-                className={`${metodo === "cartao" ? "text-orange-600" : "text-gray-400"
-                  }`}
+                className={`${
+                  metodo === "cartao" ? "text-orange-600" : "text-gray-400"
+                }`}
               />
             </div>
 
@@ -183,12 +194,14 @@ export default function Pagamento() {
 
             <div className="flex justify-between text-sm text-gray-600 mb-1">
               <span>Valor dos Produtos:</span>
-              <span className="font-semibold text-gray-800">R$ 505,25</span>
+              <span className="font-semibold text-gray-800">
+                {valorFinal || "R$ 0,00"}
+              </span>
             </div>
 
             <div className="flex justify-between text-sm text-gray-600 mb-1">
               <span>Descontos:</span>
-              <span className="text-green-600 font-semibold">- R$ 25,26</span>
+              <span className="text-green-600 font-semibold">- R$ 0,00</span>
             </div>
 
             <div className="flex justify-between text-sm text-gray-600 mb-1">
@@ -199,9 +212,11 @@ export default function Pagamento() {
             <div className="bg-green-100 text-gray-800 rounded-md p-3 mt-4">
               <div className="flex justify-between font-semibold">
                 <span>Valor à vista no PIX:</span>
-                <span className="text-green-700">R$ 479,99</span>
+                <span className="text-green-700">
+                  {" "}
+                  {valorFinal || "R$ 0,00"}{" "}
+                </span>
               </div>
-              <p className="text-xs text-gray-700">(Economize: R$ 25,26)</p>
             </div>
           </div>
 
@@ -214,12 +229,13 @@ export default function Pagamento() {
               Finalizar Compra
             </button>
 
-            <button className="w-full border border-[#A0180E] text-[#7e130b] font-semibold py-3 rounded-md mt-3 hover:bg-orange-50 transition">
-              Voltar
-            </button>
+            <Link to="/">
+              <button className="w-full border border-[#A0180E] text-[#7e130b] font-semibold py-3 rounded-md mt-3 hover:bg-orange-50 transition">
+                Voltar
+              </button>
+            </Link>
           </div>
         </div>
-
       </div>
     </div>
   );

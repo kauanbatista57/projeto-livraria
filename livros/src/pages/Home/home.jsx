@@ -509,6 +509,7 @@ export default function Home() {
                   </div>
                   <Link
                     to="/pagamento"
+                    state={{ valorFinal: formatarPreco(subtotal) }}
                     className="block w-full text-center bg-[#A0180E] text-white py-3 rounded-xl font-bold shadow-lg hover:bg-[#7e130b] transition duration-200 active:scale-[0.99]"
                   >
                     Finalizar Compra
