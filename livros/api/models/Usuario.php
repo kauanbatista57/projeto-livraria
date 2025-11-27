@@ -8,6 +8,7 @@ class Usuario {
   public $email;
   public $senha;
   public $data_nascimento;
+  public $estoque;
 
   public function __construct($db) {
     $this->conn = $db;
@@ -16,8 +17,8 @@ class Usuario {
   // Cadastrar usuário
   public function cadastrar() {
     $query = "INSERT INTO " . $this->table_name . " 
-      (nome_completo, email, senha, data_nascimento) 
-      VALUES (:nome_completo, :email, :senha, :data_nascimento)";
+      (nome_completo, email, senha, data_nascimento,estoque) 
+      VALUES (:nome_completo, :email, :senha, :data_nascimento, 0)";
     $stmt = $this->conn->prepare($query);
 
     $senhaHash = password_hash($this->senha, PASSWORD_DEFAULT);
@@ -29,6 +30,18 @@ class Usuario {
 
     return $stmt->execute();
   }
+
+  public function adicionarEstoque($qtd) {
+    $query = "UPDATE " . $this->table_name . " 
+              SET estoque = estoque + :qtd 
+              WHERE id = :id";
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(":qtd", $qtd);
+    $stmt->bindParam(":id", $this->id);
+
+    return $stmt->execute();
+}
 
   // Fazer login
   public function login() {

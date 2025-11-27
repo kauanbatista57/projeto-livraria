@@ -49,5 +49,43 @@ class UsuarioController {
     $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($usuarios);
   }
+
+
+public function addEstoque($data) {
+    // Mostrar o que o backend está recebendo
+    file_put_contents("debug_addEstoque.txt", print_r($data, true));
+
+    if (!$data) {
+        echo json_encode(["success" => false, "message" => "Nenhum dado recebido.", "data" => $data]);
+        return;
+    }
+
+    if (empty($data->id) || empty($data->quantidade)) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Campos vazios.",
+            "id" => $data->id ?? null,
+            "quantidade" => $data->quantidade ?? null
+        ]);
+        return;
+    }
+
+    $sql = "UPDATE usuarios SET estoque = estoque + :qtd WHERE id = :id";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(':qtd', $data->quantidade);
+    $stmt->bindParam(':id', $data->id);
+
+    $executou = $stmt->execute();
+
+    echo json_encode([
+        "success" => $executou,
+        "executou" => $executou,
+        "errorInfo" => $stmt->errorInfo(),
+        "dadosRecebidos" => $data
+    ]);
+}
+
+
+
 }
 ?>

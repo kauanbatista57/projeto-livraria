@@ -1,52 +1,95 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { Eye, Landmark, CreditCardIcon, CircleDot, Circle } from "lucide-react";
-import { useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 
 export default function Pagamento() {
   const location = useLocation();
   const navigate = useNavigate();
 
-
   const { valorFinal, livro } = location.state || {};
 
   const [metodo, setMetodo] = useState("pix");
-
   const [numeroCartao, setNumeroCartao] = useState("");
   const [cvc, setCvc] = useState("");
 
-  const finalizarCompra = () => {
-  const novoPedido = {
-    livroComprado: livro,
-    valorFinal: valorFinal,
-    data: new Date().toISOString(),
+  // pega usuario do mesmo localStorage que seu login usa
+  const pegarUsuario = () => {
+    try {
+      return JSON.parse(localStorage.getItem("usuario"));
+    } catch {
+      return null;
+    }
   };
 
-  // 🔥 PEGAR LISTA EXISTENTE OU CRIAR NOVA
-  const pedidosExistentes =
-    JSON.parse(localStorage.getItem("listaPedidos")) || [];
+  // chave por usuário para armazenar pedidos
+  const pedidosKeyDoUsuario = (userId) => `listaPedidos_${userId}`;
 
-  // 🔥 ADICIONAR O NOVO PEDIDO NA LISTA
-  pedidosExistentes.push(novoPedido);
+  // Função para atualizar estoque no backend (usa 'usuario' salvo no localStorage)
+  async function atualizarEstoque(qtd) {
+    const usuario = pegarUsuario();
+    if (!usuario || !usuario.id) return;
 
-  // 🔥 SALVAR LISTA ATUALIZADA
-  localStorage.setItem("listaPedidos", JSON.stringify(pedidosExistentes));
+    try {
+await fetch("http://localhost/projeto-de-apresenta-o/livros/api/index.php?action=addEstoque", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: usuario.id,
+         quantidade: 1
+        }),
+      });
+    } catch (err) {
+      console.error("Erro ao atualizar estoque:", err);
+      // não interrompe o fluxo de compra por causa do estoque, mas logamos o erro
+    }
+  }
 
-  Swal.fire({
-    icon: "success",
-    title: "Compra realizada!",
-    text: "🎉 Seu pedido foi concluído com sucesso.",
-    confirmButtonColor: "#A0180E",
-    timer: 1800,
-    showConfirmButton: false,
-  });
+  const finalizarCompra = async () => {
+    const usuario = pegarUsuario();
+    if (!usuario || !usuario.id) {
+      Swal.fire({
+        icon: "warning",
+        title: "Atenção",
+        text: "Você precisa estar logado para finalizar a compra.",
+        confirmButtonColor: "#A0180E",
+      });
+      return;
+    }
 
-  setTimeout(() => {
-    navigate("/pedidos");
-  }, 1800);
-};
+    // quantidade comprada (se existir qtd no item) — se não, 1
+    const quantidadeComprada = livro?.qtd ?? 1;
+
+    // tentar atualizar estoque no servidor (não bloqueamos demais)
+    await atualizarEstoque(quantidadeComprada);
+
+    // cria o pedido
+    const novoPedido = {
+      livroComprado: livro,
+      valorFinal: valorFinal,
+      data: new Date().toISOString(),
+    };
+
+    // pega lista específica do usuário
+    const chave = pedidosKeyDoUsuario(usuario.id);
+    const pedidosExistentes = JSON.parse(localStorage.getItem(chave)) || [];
+
+    pedidosExistentes.push(novoPedido);
+    localStorage.setItem(chave, JSON.stringify(pedidosExistentes));
+
+    Swal.fire({
+      icon: "success",
+      title: "Compra realizada!",
+      text: "🎉 Seu pedido foi concluído com sucesso.",
+      confirmButtonColor: "#A0180E",
+      timer: 1500,
+      showConfirmButton: false,
+    });
+
+    setTimeout(() => {
+      navigate("/pedidos");
+    }, 1200);
+  };
 
   const validarPagamento = () => {
     if (metodo === "pix") {
@@ -64,7 +107,7 @@ export default function Pagamento() {
       return;
     }
 
-    if (numeroCartao.length < 12) {
+    if (numeroCartao.replace(/\s/g, "").length < 12) {
       Swal.fire({
         icon: "error",
         title: "Número inválido!",
@@ -99,7 +142,7 @@ export default function Pagamento() {
             </h2>
           </div>
 
-          {/* MÉTODO PIX */}
+          {/* PIX */}
           <div
             onClick={() => setMetodo("pix")}
             className={`border rounded-md p-4 mb-4 cursor-pointer transition ${
@@ -122,13 +165,6 @@ export default function Pagamento() {
               />
             </div>
 
-            <p className="mt-2 text-sm text-gray-600">
-              Até <span className="font-bold">22% de desconto</span> com{" "}
-              <span className="font-bold">aprovação imediata</span> que torna a{" "}
-              <span className="font-bold">expedição mais rápida</span> do
-              pedido.
-            </p>
-
             {metodo === "pix" && (
               <div className="mt-4 flex flex-col items-center">
                 <img
@@ -143,7 +179,7 @@ export default function Pagamento() {
             )}
           </div>
 
-          {/* MÉTODO CARTÃO */}
+          {/* CARTÃO */}
           <div
             onClick={() => setMetodo("cartao")}
             className={`border rounded-md p-4 mb-4 cursor-pointer transition ${
@@ -217,22 +253,11 @@ export default function Pagamento() {
               </span>
             </div>
 
-            <div className="flex justify-between text-sm text-gray-600 mb-1">
-              <span>Descontos:</span>
-              <span className="text-green-600 font-semibold">- R$ 0,00</span>
-            </div>
-
-            <div className="flex justify-between text-sm text-gray-600 mb-1">
-              <span>Frete:</span>
-              <span className="font-semibold text-gray-800">R$ 0,00</span>
-            </div>
-
             <div className="bg-green-100 text-gray-800 rounded-md p-3 mt-4">
               <div className="flex justify-between font-semibold">
                 <span>Valor à vista no PIX:</span>
                 <span className="text-green-700">
-                  {" "}
-                  {valorFinal || "R$ 0,00"}{" "}
+                  {valorFinal || "R$ 0,00"}
                 </span>
               </div>
             </div>

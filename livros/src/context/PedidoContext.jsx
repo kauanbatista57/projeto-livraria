@@ -1,8 +1,7 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const PedidoContext = createContext();
 
-// Hook para usar o contexto
 export function usePedidos() {
   return useContext(PedidoContext);
 }
@@ -10,9 +9,26 @@ export function usePedidos() {
 export function PedidoProvider({ children }) {
   const [pedidos, setPedidos] = useState([]);
 
-  // Adicionar pedido novo
+  // Carregar pedidos do usuário logado
+  useEffect(() => {
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (!usuario) return;
+
+    const pedidosSalvos =
+      JSON.parse(localStorage.getItem(`pedidos_${usuario.id}`)) || [];
+    setPedidos(pedidosSalvos);
+  }, []);
+
+  // Adicionar pedido
   function adicionarPedido(novoPedido) {
-    setPedidos((prev) => [...prev, novoPedido]);
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (!usuario) return;
+
+    setPedidos((prev) => {
+      const updated = [...prev, novoPedido];
+      localStorage.setItem(`pedidos_${usuario.id}`, JSON.stringify(updated));
+      return updated;
+    });
   }
 
   return (
