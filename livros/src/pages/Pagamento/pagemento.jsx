@@ -9,7 +9,7 @@ export default function Pagamento() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // valorFinal vai ser a string formatada ex: "R$ 505,25"
+  
   const { valorFinal, livro } = location.state || {};
 
   const [metodo, setMetodo] = useState("pix");
@@ -18,6 +18,14 @@ export default function Pagamento() {
   const [cvc, setCvc] = useState("");
 
   const finalizarCompra = () => {
+    const pedido = {
+      livroComprado: livro,
+      valorFinal: valorFinal,
+      data: new Date().toISOString(),
+    };
+
+    localStorage.setItem("meuPedido", JSON.stringify(pedido));
+
     Swal.fire({
       icon: "success",
       title: "Compra realizada!",
@@ -29,12 +37,8 @@ export default function Pagamento() {
 
     setTimeout(() => {
       navigate("/pedidos", {
-  state: {
-    livroComprado: livro,
-    valorFinal: valorFinal,
-    data: new Date()
-  }
-});
+        state: pedido,
+      });
     }, 1800);
   };
 
