@@ -9,7 +9,7 @@ export default function Pagamento() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  
+
   const { valorFinal, livro } = location.state || {};
 
   const [metodo, setMetodo] = useState("pix");
@@ -18,29 +18,35 @@ export default function Pagamento() {
   const [cvc, setCvc] = useState("");
 
   const finalizarCompra = () => {
-    const pedido = {
-      livroComprado: livro,
-      valorFinal: valorFinal,
-      data: new Date().toISOString(),
-    };
-
-    localStorage.setItem("meuPedido", JSON.stringify(pedido));
-
-    Swal.fire({
-      icon: "success",
-      title: "Compra realizada!",
-      text: "🎉 Seu pedido foi concluído com sucesso.",
-      confirmButtonColor: "#A0180E",
-      timer: 1800,
-      showConfirmButton: false,
-    });
-
-    setTimeout(() => {
-      navigate("/pedidos", {
-        state: pedido,
-      });
-    }, 1800);
+  const novoPedido = {
+    livroComprado: livro,
+    valorFinal: valorFinal,
+    data: new Date().toISOString(),
   };
+
+  // 🔥 PEGAR LISTA EXISTENTE OU CRIAR NOVA
+  const pedidosExistentes =
+    JSON.parse(localStorage.getItem("listaPedidos")) || [];
+
+  // 🔥 ADICIONAR O NOVO PEDIDO NA LISTA
+  pedidosExistentes.push(novoPedido);
+
+  // 🔥 SALVAR LISTA ATUALIZADA
+  localStorage.setItem("listaPedidos", JSON.stringify(pedidosExistentes));
+
+  Swal.fire({
+    icon: "success",
+    title: "Compra realizada!",
+    text: "🎉 Seu pedido foi concluído com sucesso.",
+    confirmButtonColor: "#A0180E",
+    timer: 1800,
+    showConfirmButton: false,
+  });
+
+  setTimeout(() => {
+    navigate("/pedidos");
+  }, 1800);
+};
 
   const validarPagamento = () => {
     if (metodo === "pix") {

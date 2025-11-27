@@ -1,29 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { ShoppingBag, Calendar } from "lucide-react";
 import SidebarMenu from "../../Components/SidebarMenu/SidebarMenu";
-import { useLocation } from "react-router-dom";
 
 export default function Pedidos() {
-  const location = useLocation();
-  const [pedido, setPedido] = useState(null);
+  const [pedidos, setPedidos] = useState([]);
 
   useEffect(() => {
-    if (location.state) {
-      setPedido(location.state);
-      localStorage.setItem("meuPedido", JSON.stringify(location.state));
-    } else {
-      const salvo = localStorage.getItem("meuPedido");
-      if (salvo) {
-        setPedido(JSON.parse(salvo));
-      }
-    }
-  }, [location.state]);
-
-  if (!pedido) {
-    return <p className="text-center mt-10">Nenhum pedido encontrado.</p>;
-  }
-
-  const { livroComprado, valorFinal, data } = pedido;
+    const lista = JSON.parse(localStorage.getItem("listaPedidos")) || [];
+    setPedidos(lista);
+  }, []);
 
   return (
     <div className="grid grid-cols-12 min-h-screen">
@@ -40,39 +25,48 @@ export default function Pedidos() {
 
           <div className="bg-white rounded-md shadow-sm p-6">
             <h2 className="text-lg font-bold text-gray-800 text-center mb-4">
-              Pedido Realizado
+              Pedidos Realizados
             </h2>
 
-            <div className="flex items-start gap-4 border-b pb-4">
-              <img
-                src={livroComprado.imagem}
-                alt={livroComprado.titulo}
-                className="w-24 h-32 object-cover rounded-md"
-              />
+            {pedidos.length === 0 ? (
+              <p className="text-center text-gray-600">Nenhum pedido encontrado.</p>
+            ) : (
+              pedidos.map((pedido, index) => (
+                <div
+                  key={index}
+                  className="flex items-start gap-4 border-b pb-4 mb-4"
+                >
+                  <img
+                    src={pedido.livroComprado.imagem}
+                    alt={pedido.livroComprado.titulo}
+                    className="w-24 h-32 object-cover rounded-md"
+                  />
 
-              <div className="text-left flex flex-col">
-                <p className="text-gray-800 font-bold text-lg">
-                  {livroComprado.titulo}
-                </p>
+                  <div className="text-left flex flex-col">
+                    <p className="text-gray-800 font-bold text-lg">
+                      {pedido.livroComprado.titulo}
+                    </p>
 
-                <p className="text-gray-700 text-sm mt-1">
-                  <span className="font-semibold">Valor Total:</span>{" "}
-                  {valorFinal}
-                </p>
+                    <p className="text-gray-700 text-sm mt-1">
+                      <span className="font-semibold">Valor Total:</span>{" "}
+                      {pedido.valorFinal}
+                    </p>
 
-                <p className="text-gray-700 text-sm mt-1 flex items-center gap-1">
-                  <Calendar size={16} className="text-[#A0180E]" />
-                  <span className="font-semibold">Data:</span>{" "}
-                  {new Date(data).toLocaleDateString()}
-                </p>
+                    <p className="text-gray-700 text-sm mt-1 flex items-center gap-1">
+                      <Calendar size={16} className="text-[#A0180E]" />
+                      <span className="font-semibold">Data:</span>{" "}
+                      {new Date(pedido.data).toLocaleDateString()}
+                    </p>
 
-                {livroComprado.autor && (
-                  <p className="text-gray-600 text-sm mt-1">
-                    {livroComprado.autor}
-                  </p>
-                )}
-              </div>
-            </div>
+                    {pedido.livroComprado.autor && (
+                      <p className="text-gray-600 text-sm mt-1">
+                        {pedido.livroComprado.autor}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
