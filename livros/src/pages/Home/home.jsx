@@ -30,7 +30,7 @@ export default function Home() {
         editora: "Todavia",
         preco: "R$ 89,90",
         imagem:
-          "/assets/capas/medo.JPG"
+          "/assets/capas/medo.jpg"
       },
       {
         id: 2,
@@ -39,7 +39,7 @@ export default function Home() {
         editora: "Workman Publishing",
         preco: "R$ 216,00",
         imagem:
-          "/assets/capas/birds.JPG",      },
+          "/assets/capas/birds.jpg",      },
       {
         id: 3,
       titulo: "Diário de Um Banana 20 - Festa Insana",
@@ -48,7 +48,7 @@ export default function Home() {
       preco: "R$ 69,90",
       
     
-      imagem: "/assets/capas/banana.JPG",
+      imagem: "/assets/capas/banana.jpg"
       },
       {
         id: 4,
@@ -57,7 +57,7 @@ export default function Home() {
         editora: "Workman Publishing",
         preco: "R$ 216,00",
         imagem:
-          "https://livrariadavila.vtexassets.com/arquivos/ids/8043032-300-400?v=638980275563770000&width=300&height=400&aspect=true",
+         "/assets/capas/bugs.png"
       },
       {
         id: 5,
@@ -66,7 +66,7 @@ export default function Home() {
         editora: "Harper Kids",
         preco: "R$ 149,90",
         imagem:
-          "https://livrariadavila.vtexassets.com/arquivos/ids/8067202-300-400?v=638983127869000000&width=300&height=400&aspect=true",
+          "/assets/capas/2026.jpg",
       },
       {
         id: 6,
@@ -102,7 +102,7 @@ export default function Home() {
         editora: "Record",
         preco: "R$ 69,90",
         imagem:
-          "https://livrariadavila.vtexassets.com/arquivos/ids/8050681-300-400?v=638981252946170000&width=300&height=400&aspect=true",
+          "/assets/capas/paciente.jpg",
       },
       {
         id: 10,
@@ -111,7 +111,7 @@ export default function Home() {
         editora: "Principis",
         preco: "R$ 39,90",
         imagem:
-          "https://livrariadavila.vtexassets.com/arquivos/ids/8007184-300-400?v=638975711541030000&width=300&height=400&aspect=true",
+          "/assets/capas/homes.jpg",
       },
       {
         id: 11,
@@ -120,7 +120,7 @@ export default function Home() {
         editora: "HarperCollins",
         preco: "R$ 29,90",
         imagem:
-          "https://livrariadavila.vtexassets.com/arquivos/ids/7864032-300-400?v=638955963730900000&width=300&height=400&aspect=true",
+          "/assets/capas/pequeno.jpg",
       },
       {
         id: 12,
@@ -129,7 +129,7 @@ export default function Home() {
         editora: "Arqueiro",
         preco: "R$ 74,90",
         imagem:
-          "https://livrariadavila.vtexassets.com/arquivos/ids/8032493-800-800?v=638978960833600000&width=800&height=800&aspect=true",
+         "/assets/capas/vinci.jpg",
       },
       {
         id: 13,
@@ -138,7 +138,7 @@ export default function Home() {
         editora: "Paralela",
         preco: "R$ 64,90",
         imagem:
-          "https://livrariadavila.vtexassets.com/arquivos/ids/8051694-300-400?v=638981376436700000&width=300&height=400&aspect=true",
+          "/assets/capas/sete.jpg",
       },
       {
         id: 14,
@@ -156,7 +156,7 @@ export default function Home() {
         editora: "Rocco",
         preco: "R$ 72,00",
         imagem:
-          "https://livrariadavila.vtexassets.com/arquivos/ids/8025644-300-400?v=638978083608430000&width=300&height=400&aspect=true",
+          "/assets/capas/margaret.jpg",
       },
     ],
     []
