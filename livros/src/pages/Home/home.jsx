@@ -30,7 +30,7 @@ export default function Home() {
         editora: "Todavia",
         preco: "R$ 89,90",
         imagem:
-          "https://livrariadavila.vtexassets.com/arquivos/ids/8051402-800-800?v=638981328522400000&width=800&height=800&aspect=true",
+          "/assets/capas/medo.JPG"
       },
       {
         id: 2,
@@ -39,16 +39,16 @@ export default function Home() {
         editora: "Workman Publishing",
         preco: "R$ 216,00",
         imagem:
-          "https://livrariadavila.vtexassets.com/arquivos/ids/8051154-300-400?v=638981302813330000&width=300&height=400&aspect=true",
-      },
+          "/assets/capas/birds.JPG",      },
       {
         id: 3,
-        titulo: "Diário de Um Banana 20 - Festa Insana",
-        autor: "Jeff Kinney",
-        editora: "Vergara & Riba",
-        preco: "R$ 69,90",
-        imagem:
-          "https://livrariadavila.vtexassets.com/arquivos/ids/8076506-300-400?v=638984301796600000&width=300&height=400&aspect=true",
+      titulo: "Diário de Um Banana 20 - Festa Insana",
+      autor: "Jeff Kinney",
+      editora: "Vergara & Riba",
+      preco: "R$ 69,90",
+      
+    
+      imagem: "/assets/capas/banana.JPG",
       },
       {
         id: 4,
@@ -129,7 +129,7 @@ export default function Home() {
         editora: "Arqueiro",
         preco: "R$ 74,90",
         imagem:
-          "https://livrariadavila.vtexassets.com/arquivos/ids/8032493-800-800?v=638978960833600000&width=800&height=800&aspect=tr",
+          "https://livrariadavila.vtexassets.com/arquivos/ids/8032493-800-800?v=638978960833600000&width=800&height=800&aspect=true",
       },
       {
         id: 13,
