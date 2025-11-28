@@ -25,3 +25,6 @@ Uso de Bibliotecas do React: para otimização de componentes e melhoria da inte
 Interface estilizada com Tailwind CSS: garantindo um layout moderno, responsivo e consistente.
 
 O resultado é um sistema completo e funcional, que demonstra domínio das tecnologias utilizadas, trabalho em equipe e capacidade de entregar uma solução real e escalável.
+
+
+/* para utilizar do projeto funcionar 100% e obrigatorio ter utilizar o xampp instalado na maquina!*/
